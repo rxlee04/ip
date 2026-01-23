@@ -16,7 +16,7 @@ public class Task {
 
     @Override
     public String toString() {
-        String tString = isDone?"[X]":"[ ]";
+        String tString = isDone ? "[X]" : "[ ]";
         tString += " " + taskName;
         return tString;
     }
