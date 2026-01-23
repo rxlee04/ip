@@ -25,9 +25,22 @@ public class Wooper {
         while (!userInput.equals("bye")) {
             System.out.println(divider);
             if (userInput.equals("list")) {
+                System.out.println(" Here are the tasks in your list:");
                 for (int i = 0; i < taskList.size(); i++) {
-                    System.out.println((i + 1) + ". " + taskList.get(i).getTaskName());
+                    System.out.println((i + 1) + ". " + taskList.get(i).toString());
                 }
+            } else if (userInput.startsWith("mark")) {
+                String taskNoStr = userInput.substring(userInput.indexOf("mark") + 5);
+                int taskNo = Integer.parseInt(taskNoStr);
+                taskList.get(taskNo - 1).setDone(true);
+                System.out.println("Nice! I've marked this task as done:");
+                System.out.println(taskList.get(taskNo - 1).toString());
+            } else if (userInput.startsWith("unmark")) {
+                String taskNoStr = userInput.substring(userInput.indexOf("unmark") + 7);
+                int taskNo = Integer.parseInt(taskNoStr);
+                taskList.get(taskNo - 1).setDone(false);
+                System.out.println("OK, I've marked this task as not done yet:");
+                System.out.println(taskList.get(taskNo - 1).toString());
             } else if (!userInput.equals("bye")) {
                 taskList.add(new Task(userInput));
                 System.out.println("added: " + userInput);
