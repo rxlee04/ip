@@ -1,3 +1,5 @@
+package wooper.enums;
+
 public enum CommandType {
     LIST,
     MARK,

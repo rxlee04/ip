@@ -1,3 +1,7 @@
+package wooper.ui;
+
+import wooper.task.Task;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -11,7 +15,7 @@ public class UI {
     }
 
     public void printGreetingMessage() {
-        String greetMsg = "Woo-pah! I'm Wooper\n What can I do for you?";
+        String greetMsg = "Woo-pah! I'm wooper.Wooper\n What can I do for you?";
         System.out.println(divider);
         System.out.println(greetMsg);
         System.out.println(divider);

@@ -1,3 +1,7 @@
+package wooper.parser;
+
+import wooper.enums.CommandType;
+
 import java.util.ArrayList;
 
 public class Parser {

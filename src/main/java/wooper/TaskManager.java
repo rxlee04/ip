@@ -1,10 +1,18 @@
+package wooper;
+
+import wooper.exception.WooperException;
+import wooper.task.Deadline;
+import wooper.task.Event;
+import wooper.task.Task;
+import wooper.task.ToDo;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.Temporal;
 import java.util.ArrayList;
 
 public class TaskManager {
-    // Task List
+    // wooper.task.Task List
     private final ArrayList<Task> taskList = new ArrayList<>();
 
     public ArrayList<Task> getAllTasks() {
