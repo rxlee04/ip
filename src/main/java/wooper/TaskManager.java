@@ -77,7 +77,7 @@ public class TaskManager {
             td = new Event(taskDesc, (LocalDateTime) sdl, (LocalDateTime) edl);
         } else if (sdl instanceof LocalDate && edl instanceof LocalDate) {
             td = new Event(taskDesc, (LocalDate) sdl, (LocalDate) edl);
-        } else{
+        } else {
             throw new WooperException("Woop! Please give same event date format (DD/MM/YYYY or DD/MM/YYYY HH:mm) for BOTH");
         }
 
@@ -99,4 +99,23 @@ public class TaskManager {
         }
     }
 
+    /**
+     * Returns a list of tasks whose descriptions contain the specified search string.
+     *
+     * @param taskStr Keyword used to match task descriptions.
+     * @return A list of tasks whose names contain the specified string.
+     * @throws WooperException If the search string is empty or blank.
+     */
+    public ArrayList<Task> findTasks(String taskStr) throws WooperException {
+        if (taskStr.isEmpty() || taskStr.isBlank()) {
+            throw new WooperException("Woop! Let me know which task you are trying to find :>");
+        }
+        ArrayList<Task> matchedTL = new ArrayList<>();
+        for (int i = 0; i < taskList.size(); i++) {
+            if (taskList.get(i).getTaskName().toLowerCase().contains(taskStr.toLowerCase())) {
+                matchedTL.add(taskList.get(i));
+            }
+        }
+        return matchedTL;
+    }
 }

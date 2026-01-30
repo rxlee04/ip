@@ -9,5 +9,6 @@ public enum CommandType {
     EVENT,
     DELETE,
     BYE,
-    UNKNOWN
+    UNKNOWN,
+    FIND
 }

@@ -73,4 +73,22 @@ public class UI {
         System.out.println(err);
         System.out.println(divider);
     }
+
+    /**
+     * Prints the list of tasks that match a search query.
+     * Displays a message indicating no matches if the list is empty.
+     *
+     * @param taskList List of tasks that matched the search criteria.
+     */
+    public void printFindTasksMessage(ArrayList<Task> taskList) {
+        System.out.println(divider);
+        if (taskList.isEmpty()) {
+            System.out.println("Woop! No matching tasks found.");
+        } else {
+            for (int i = 0; i < taskList.size(); i++) {
+                System.out.println((i + 1) + ". " + taskList.get(i).toString());
+            }
+        }
+        System.out.println(divider);
+    }
 }
