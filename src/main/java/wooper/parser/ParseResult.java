@@ -33,11 +33,11 @@ public class ParseResult {
         args = inArgs;
     }
 
-    public CommandType getCommandType(){
+    public CommandType getCommandType() {
         return command;
     }
 
-    public ArrayList<String> getArgs(){
+    public ArrayList<String> getArgs() {
         return args;
     }
 }
