@@ -164,4 +164,24 @@ public class TaskManager {
             taskList.add(inTaskList.get(i));
         }
     }
+
+    /**
+     * Returns a list of tasks whose descriptions contain the specified search string.
+     *
+     * @param taskStr Keyword used to match task descriptions.
+     * @return A list of tasks whose names contain the specified string.
+     * @throws WooperException If the search string is empty or blank.
+     */
+    public ArrayList<Task> findTasks(String taskStr) throws WooperException {
+        if (taskStr.isEmpty() || taskStr.isBlank()) {
+            throw new WooperException("Woop! Let me know which task you are trying to find :>");
+        }
+        ArrayList<Task> matchedTL = new ArrayList<>();
+        for (int i = 0; i < taskList.size(); i++) {
+            if (taskList.get(i).getTaskName().toLowerCase().contains(taskStr.toLowerCase())) {
+                matchedTL.add(taskList.get(i));
+            }
+        }
+        return matchedTL;
+    }
 }

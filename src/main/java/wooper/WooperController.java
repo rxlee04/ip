@@ -107,6 +107,9 @@ public class WooperController {
                     // print and save
                     ui.printDeleteTaskMessage(t, taskManager.getTaskListSize());
                     storage.save(taskManager.getAllTasks());
+                } else if (action == CommandType.FIND) {
+                    ArrayList<Task> matchedTL = taskManager.findTasks(pr.getArgs().get(0));
+                    ui.printFindTasksMessage(matchedTL);
                 } else if (action == CommandType.BYE) {
                     ui.printExitMessage();
                     break;
