@@ -1,3 +1,5 @@
+package wooper.task;
+
 public class Task {
     private String taskName = null;
     private boolean isDone = false;
