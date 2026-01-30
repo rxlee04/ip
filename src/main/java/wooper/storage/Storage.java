@@ -18,9 +18,22 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+/**
+ * Loads tasks from and saves tasks to a JSON file on disk.
+ * Tasks are persisted in {@code data/wooper.json} as a JSON array. Each task is stored
+ * with its type, description, completion status, and any relevant date information.
+ */
 public class Storage {
+    /** Path to the JSON file used for persisting tasks. */
     private final Path filePath = Paths.get("data", "wooper.json");
 
+    /**
+     * Returns the list of tasks loaded from the save file.
+     * Returns an empty list if the save file does not exist or contains no tasks.
+     *
+     * @return The list of tasks loaded from storage.
+     * @throws WooperException If the file cannot be read or the JSON content is invalid.
+     */
     public ArrayList<Task> load() throws WooperException {
         // if file dont exist = no data
         if (!Files.exists(filePath)) {
@@ -53,6 +66,13 @@ public class Storage {
         }
     }
 
+    /**
+     * Saves the specified list of tasks to the save file.
+     * Creates the parent directory if it does not already exist.
+     *
+     * @param taskList List of tasks to be saved.
+     * @throws IOException If writing to the save file fails.
+     */
     public void save(ArrayList<Task> taskList) throws IOException {
         // create folder if missing
         Files.createDirectories(filePath.getParent());
@@ -66,6 +86,12 @@ public class Storage {
         Files.writeString(filePath, jsonArray.toString(2));
     }
 
+    /**
+     * Returns a JSON representation of the specified task.
+     *
+     * @param t Task to be converted.
+     * @return A {@link JSONObject} containing the task data.
+     */
     private JSONObject taskToJson(Task t) {
         JSONObject obj = new JSONObject();
         obj.put("done", t.isDone());
@@ -85,6 +111,13 @@ public class Storage {
         return obj;
     }
 
+    /**
+     * Returns a task constructed from the specified JSON object.
+     *
+     * @param obj JSON object containing task data.
+     * @return The task represented by the JSON object.
+     * @throws WooperException If the JSON object is missing required fields or contains invalid values.
+     */
     private Task jsonToTask(JSONObject obj) throws WooperException {
         String type = obj.optString("type", "");
         String desc = obj.optString("desc", "");

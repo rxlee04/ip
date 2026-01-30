@@ -13,6 +13,11 @@ import java.io.IOException;
 import java.time.temporal.Temporal;
 import java.util.ArrayList;
 
+/**
+ * Handles the main control flow of the Wooper application.
+ * Coordinates interactions between the user interface, parser, task manager,
+ * and storage components to process user commands and execute the corresponding actions.
+ */
 public class WooperController {
 
     private final Parser parser = new Parser();
@@ -20,7 +25,14 @@ public class WooperController {
     private final UI ui = new UI();
     private final Storage storage = new Storage();
 
-
+    /**
+     * Starts the main loop of the Wooper.
+     * Loads existing tasks from storage.
+     * Displays the greeting message.
+     * Repeatedly reads user input, parses commands, executes the requested actions, and saves task
+     * updates when necessary. The loop terminates when the "bye" command is given.
+     *
+     */
     public void run() {
         // print greeting msg
         ui.printGreetingMessage();
@@ -81,8 +93,8 @@ public class WooperController {
                     storage.save(taskManager.getAllTasks());
                 } else if (action == CommandType.EVENT) {
                     String taskDesc = pr.getArgs().get(0);
-                    Temporal sdl = DateTimeUtil.parseDateOrDateTime(pr.getArgs().get(1),CommandType.EVENT);
-                    Temporal edl = DateTimeUtil.parseDateOrDateTime(pr.getArgs().get(2),CommandType.EVENT);
+                    Temporal sdl = DateTimeUtil.parseDateOrDateTime(pr.getArgs().get(1), CommandType.EVENT);
+                    Temporal edl = DateTimeUtil.parseDateOrDateTime(pr.getArgs().get(2), CommandType.EVENT);
                     Task t = taskManager.addEventTask(taskDesc, sdl, edl);
 
                     // print and save
@@ -109,6 +121,4 @@ public class WooperController {
         }
 
     }
-
-
 }

@@ -4,8 +4,20 @@ import wooper.enums.CommandType;
 
 import java.util.ArrayList;
 
+/**
+ * Parses user input strings into commands and their corresponding arguments.
+ */
 public class Parser {
 
+    /**
+     * Returns the command type and arguments parsed from the given user input.
+     * Identifies the command keyword and extracts any required arguments based on
+     * the expected command format. Returns an unknown command type if the input
+     * does not match any supported command.
+     *
+     * @param str User input string to be parsed.
+     * @return A {@link ParseResult} containing the parsed command type and arguments.
+     */
     public ParseResult getActionAndArguments(String str) {
         str = str.trim();
         ParseResult pr;
@@ -50,6 +62,5 @@ public class Parser {
         }
 
         return pr;
-
     }
 }
