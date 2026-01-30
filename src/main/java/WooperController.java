@@ -1,4 +1,9 @@
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.Temporal;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -9,6 +14,7 @@ public class WooperController {
     private final TextView view = new TextView();
     private final Storage storage = new Storage();
 
+
     public void run() {
         // print greeting msg
         view.printGreetingMessage();
@@ -17,7 +23,7 @@ public class WooperController {
         try {
             ArrayList<Task> storageTasks = storage.load();
             taskManager.loadTaskList(storageTasks);
-        }catch (WooperException e) {
+        } catch (WooperException e) {
             view.printErrorMessage(e.getMessage());
         }
 
@@ -37,36 +43,48 @@ public class WooperController {
                 if (action == CommandType.LIST) {
                     view.printTaskList(taskManager.getAllTasks());
                 } else if (action == CommandType.MARK) {
-                    int taskNo = Integer.parseInt(actionAndArgs.get(1)) - 1;
+                    int taskNo = Integer.parseInt(actionAndArgs.get(1)) - 1; // parse task no string -> int
                     Task t = taskManager.markTaskDone(taskNo);
+
+                    // print and save
                     view.printMarkTaskDoneMessage(t);
                     storage.save(taskManager.getAllTasks());
                 } else if (action == CommandType.UNMARK) {
-                    int taskNo = Integer.parseInt(actionAndArgs.get(1)) - 1;
+                    int taskNo = Integer.parseInt(actionAndArgs.get(1)) - 1; // parse task no string -> int
                     Task t = taskManager.unmarkTaskDone(taskNo);
+
+                    // print and save
                     view.printUnmarkTaskDoneMessage(t);
                     storage.save(taskManager.getAllTasks());
                 } else if (action == CommandType.TODO) {
                     String taskName = actionAndArgs.get(1);
                     Task t = taskManager.addToDoTask(taskName);
+
+                    // print and save
                     view.printAddTaskMessage(t, taskManager.getTaskListSize());
                     storage.save(taskManager.getAllTasks());
                 } else if (action == CommandType.DEADLINE) {
                     String taskDesc = actionAndArgs.get(1);
-                    String dl = actionAndArgs.get(2);
+                    Temporal dl = DateTimeUtil.parseDateOrDateTime(actionAndArgs.get(2), CommandType.DEADLINE);
                     Task t = taskManager.addDeadlineTask(taskDesc, dl);
+
+                    // print and save
                     view.printAddTaskMessage(t, taskManager.getTaskListSize());
                     storage.save(taskManager.getAllTasks());
                 } else if (action == CommandType.EVENT) {
                     String taskDesc = actionAndArgs.get(1);
-                    String sdl = actionAndArgs.get(2);
-                    String edl = actionAndArgs.get(3);
+                    Temporal sdl = DateTimeUtil.parseDateOrDateTime(actionAndArgs.get(2),CommandType.EVENT);
+                    Temporal edl = DateTimeUtil.parseDateOrDateTime(actionAndArgs.get(3),CommandType.EVENT);
                     Task t = taskManager.addEventTask(taskDesc, sdl, edl);
+
+                    // print and save
                     view.printAddTaskMessage(t, taskManager.getTaskListSize());
                     storage.save(taskManager.getAllTasks());
                 } else if (action == CommandType.DELETE) {
                     int taskNo = Integer.parseInt(actionAndArgs.get(1)) - 1;
                     Task t = taskManager.deleteTask(taskNo);
+
+                    // print and save
                     view.printDeleteTaskMessage(t, taskManager.getTaskListSize());
                     storage.save(taskManager.getAllTasks());
                 } else if (action == CommandType.BYE) {
