@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -6,13 +7,24 @@ public class WooperController {
     private final Scanner scanner = new Scanner(System.in);
     private final TaskManager taskManager = new TaskManager();
     private final TextView view = new TextView();
+    private final Storage storage = new Storage();
 
     public void run() {
         // print greeting msg
         view.printGreetingMessage();
 
+        // load data from storage
+        try {
+            ArrayList<Task> storageTasks = storage.load();
+            taskManager.loadTaskList(storageTasks);
+        }catch (WooperException e) {
+            view.printErrorMessage(e.getMessage());
+        }
+
         // user input for task management
         String userInput = "";
+
+        // formatted user input
         ArrayList<String> actionAndArgs;
         CommandType action = null;
 
@@ -28,29 +40,35 @@ public class WooperController {
                     int taskNo = Integer.parseInt(actionAndArgs.get(1)) - 1;
                     Task t = taskManager.markTaskDone(taskNo);
                     view.printMarkTaskDoneMessage(t);
+                    storage.save(taskManager.getAllTasks());
                 } else if (action == CommandType.UNMARK) {
                     int taskNo = Integer.parseInt(actionAndArgs.get(1)) - 1;
                     Task t = taskManager.unmarkTaskDone(taskNo);
                     view.printUnmarkTaskDoneMessage(t);
+                    storage.save(taskManager.getAllTasks());
                 } else if (action == CommandType.TODO) {
                     String taskName = actionAndArgs.get(1);
                     Task t = taskManager.addToDoTask(taskName);
                     view.printAddTaskMessage(t, taskManager.getTaskListSize());
+                    storage.save(taskManager.getAllTasks());
                 } else if (action == CommandType.DEADLINE) {
                     String taskDesc = actionAndArgs.get(1);
                     String dl = actionAndArgs.get(2);
                     Task t = taskManager.addDeadlineTask(taskDesc, dl);
                     view.printAddTaskMessage(t, taskManager.getTaskListSize());
+                    storage.save(taskManager.getAllTasks());
                 } else if (action == CommandType.EVENT) {
                     String taskDesc = actionAndArgs.get(1);
                     String sdl = actionAndArgs.get(2);
                     String edl = actionAndArgs.get(3);
                     Task t = taskManager.addEventTask(taskDesc, sdl, edl);
                     view.printAddTaskMessage(t, taskManager.getTaskListSize());
+                    storage.save(taskManager.getAllTasks());
                 } else if (action == CommandType.DELETE) {
                     int taskNo = Integer.parseInt(actionAndArgs.get(1)) - 1;
                     Task t = taskManager.deleteTask(taskNo);
                     view.printDeleteTaskMessage(t, taskManager.getTaskListSize());
+                    storage.save(taskManager.getAllTasks());
                 } else if (action == CommandType.BYE) {
                     view.printExitMessage();
                     break;
@@ -59,6 +77,8 @@ public class WooperController {
                 }
             } catch (WooperException e) {
                 view.printErrorMessage(e.getMessage());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         }
 
