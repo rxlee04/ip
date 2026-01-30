@@ -6,10 +6,12 @@ public class Deadline extends Task {
         datetime = inDatetime;
     }
 
+    public String getDatetime() {
+        return datetime;
+    }
+
     @Override
     public String toString() {
         return "[D]" + super.toString() + " (by: " + datetime + ")";
     }
-
-
 }

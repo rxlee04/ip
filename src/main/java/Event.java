@@ -8,6 +8,14 @@ public class Event extends Task {
         endDT = inEndDT;
     }
 
+    public String getStartDateTime() {
+        return startDT;
+    }
+
+    public String getEndDateTime() {
+        return endDT;
+    }
+
     @Override
     public String toString() {
         return "[E]" + super.toString() + " (from: " + startDT + " to: " + endDT + ")";

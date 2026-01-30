@@ -73,4 +73,10 @@ public class TaskManager {
         return t;
     }
 
+    public void loadTaskList(ArrayList<Task> inTaskList) {
+        for (int i = 0; i < inTaskList.size(); i++) {
+            taskList.add(inTaskList.get(i));
+        }
+    }
+
 }
