@@ -1,9 +1,17 @@
 package wooper.task;
 
+/**
+ * Represents a generic task with a description and completion status.
+ */
 public class Task {
     private String taskName = null;
     private boolean isDone = false;
 
+    /**
+     * Creates a task with the specified description.
+     *
+     * @param inTaskName Description of the task.
+     */
     public Task(String inTaskName) {
         taskName = inTaskName;
     }
