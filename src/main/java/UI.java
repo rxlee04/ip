@@ -1,8 +1,14 @@
 import java.util.ArrayList;
+import java.util.Scanner;
 
-public class TextView {
+public class UI {
 
+    private final Scanner scanner = new Scanner(System.in);
     private final String divider = "____________________________________________________________";
+
+    public String getUserCommand() {
+        return scanner.nextLine();
+    }
 
     public void printGreetingMessage() {
         String greetMsg = "Woo-pah! I'm Wooper\n What can I do for you?";

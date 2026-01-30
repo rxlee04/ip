@@ -48,27 +48,4 @@ public class Parser {
         return pr;
 
     }
-
-    private CommandType getCommandType(String action) {
-        switch (action) {
-            case "list":
-                return CommandType.LIST;
-            case "mark":
-                return CommandType.MARK;
-            case "unmark":
-                return CommandType.UNMARK;
-            case "todo":
-                return CommandType.TODO;
-            case "deadline":
-                return CommandType.DEADLINE;
-            case "event":
-                return CommandType.EVENT;
-            case "delete":
-                return CommandType.DELETE;
-            case "bye":
-                return CommandType.BYE;
-            default:
-                return CommandType.UNKNOWN;
-        }
-    }
 }
