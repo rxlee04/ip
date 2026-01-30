@@ -1,3 +1,6 @@
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.Temporal;
 import java.util.ArrayList;
 
 public class TaskManager {
@@ -31,7 +34,7 @@ public class TaskManager {
     }
 
     public ToDo addToDoTask(String taskName) throws WooperException {
-        if (taskName.isEmpty()) {
+        if (taskName.isEmpty() || taskName.isBlank()) {
             throw new WooperException("Woop! Please give the todo a description!");
         }
         ToDo td = new ToDo(taskName);
@@ -39,28 +42,37 @@ public class TaskManager {
         return td;
     }
 
-    public Deadline addDeadlineTask(String taskDesc, String dl) throws WooperException {
-        if (taskDesc.isEmpty()) {
+    public Deadline addDeadlineTask(String taskDesc, Temporal dl) throws WooperException {
+        if (taskDesc.isEmpty() || taskDesc.isBlank()) {
             throw new WooperException("Woop! Please give the deadline a description!");
         }
-        if (dl.isEmpty()) {
-            throw new WooperException("Woop! Please give a deadline!");
-        }
 
-        Deadline td = new Deadline(taskDesc, dl);
+        Deadline td;
+        if (dl instanceof LocalDateTime) {
+            td = new Deadline(taskDesc, (LocalDateTime) dl);
+        } else if (dl instanceof LocalDate) {
+            td = new Deadline(taskDesc, (LocalDate) dl);
+        } else {
+            throw new WooperException("Woop! Invalid deadline date format.");
+        }
         taskList.add(td);
         return td;
     }
 
-    public Event addEventTask(String taskDesc, String sdl, String edl) throws WooperException {
-        if (taskDesc.isEmpty()) {
+    public Event addEventTask(String taskDesc, Temporal sdl, Temporal edl) throws WooperException {
+        if (taskDesc.isEmpty() || taskDesc.isBlank()) {
             throw new WooperException("Woop! Please give the event a description!");
         }
-        if (sdl.isEmpty() || edl.isEmpty()) {
-            throw new WooperException("Woop! Please give event's start and/or end date!");
+
+        Event td;
+        if (sdl instanceof LocalDateTime && edl instanceof LocalDateTime) {
+            td = new Event(taskDesc, (LocalDateTime) sdl, (LocalDateTime) edl);
+        } else if (sdl instanceof LocalDate && edl instanceof LocalDate) {
+            td = new Event(taskDesc, (LocalDate) sdl, (LocalDate) edl);
+        } else{
+            throw new WooperException("Woop! Please give same event date format (DD/MM/YYYY or DD/MM/YYYY HH:mm) for BOTH");
         }
 
-        Event td = new Event(taskDesc, sdl, edl);
         taskList.add(td);
         return td;
     }
