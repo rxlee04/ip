@@ -1,6 +1,7 @@
 package wooper.parser;
 
 import org.junit.jupiter.api.Test;
+
 import wooper.enums.CommandType;
 
 import java.util.ArrayList;

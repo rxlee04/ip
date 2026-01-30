@@ -81,8 +81,8 @@ public class WooperController {
                     storage.save(taskManager.getAllTasks());
                 } else if (action == CommandType.EVENT) {
                     String taskDesc = pr.getArgs().get(0);
-                    Temporal sdl = DateTimeUtil.parseDateOrDateTime(pr.getArgs().get(1),CommandType.EVENT);
-                    Temporal edl = DateTimeUtil.parseDateOrDateTime(pr.getArgs().get(2),CommandType.EVENT);
+                    Temporal sdl = DateTimeUtil.parseDateOrDateTime(pr.getArgs().get(1), CommandType.EVENT);
+                    Temporal edl = DateTimeUtil.parseDateOrDateTime(pr.getArgs().get(2), CommandType.EVENT);
                     Task t = taskManager.addEventTask(taskDesc, sdl, edl);
 
                     // print and save

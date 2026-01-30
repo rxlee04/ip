@@ -77,7 +77,7 @@ public class TaskManager {
             td = new Event(taskDesc, (LocalDateTime) sdl, (LocalDateTime) edl);
         } else if (sdl instanceof LocalDate && edl instanceof LocalDate) {
             td = new Event(taskDesc, (LocalDate) sdl, (LocalDate) edl);
-        } else{
+        } else {
             throw new WooperException("Woop! Please give same event date format (DD/MM/YYYY or DD/MM/YYYY HH:mm) for BOTH");
         }
 
