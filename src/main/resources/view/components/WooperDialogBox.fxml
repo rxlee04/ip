@@ -8,7 +8,7 @@
 <fx:root alignment="TOP_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="400.0"
          type="javafx.scene.layout.HBox" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" spacing="10">
     <children>
-        <Circle fx:id="displayPicture" radius="40.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+        <Circle fx:id="displayPicture" radius="35.0" stroke="TRANSPARENT" strokeType="INSIDE" />
         <Label fx:id="dialog" minHeight="-Infinity" text="Label" wrapText="true"
                style="-fx-background-color: lightgrey; -fx-background-radius: 12; -fx-padding: 10px;"/>
     </children>

@@ -1,10 +1,10 @@
 package wooper.ui.gui;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
@@ -25,15 +25,20 @@ public class MainWindow extends AnchorPane {
     private Wooper wooper;
 
 
-
     @FXML
     public void initialize() {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
     }
 
-    /** Injects the Duke instance */
+    /**
+     * Injects the Wooper instance
+     */
     public void setWooper(Wooper w) {
         wooper = w;
+        String greeting = wooper.initWooper();
+        dialogContainer.getChildren().add(
+                WooperDialogBox.getWooperDialog(greeting)
+        );
     }
 
     /**
@@ -49,5 +54,9 @@ public class MainWindow extends AnchorPane {
                 WooperDialogBox.getWooperDialog(response)
         );
         userInput.clear();
+
+        if (input.trim().equalsIgnoreCase("bye")) {
+            Platform.exit();
+        }
     }
 }

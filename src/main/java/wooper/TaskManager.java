@@ -48,7 +48,7 @@ public class TaskManager {
      */
     public Task markTaskDone(int taskNo) throws WooperException {
         if (taskNo < 0 || taskNo >= taskList.size()) {
-            throw new WooperException("Woop! Choose a number from the task list!");
+            throw new WooperException("Choose a number from the task list!");
         }
         Task t = taskList.get(taskNo);
         t.setDone(true);
@@ -64,7 +64,7 @@ public class TaskManager {
      */
     public Task unmarkTaskDone(int taskNo) throws WooperException {
         if (taskNo < 0 || taskNo >= taskList.size()) {
-            throw new WooperException("Woop! Choose a number from the task list!");
+            throw new WooperException("Choose a number from the task list!");
         }
         Task t = taskList.get(taskNo);
         t.setDone(false);
@@ -80,7 +80,7 @@ public class TaskManager {
      */
     public ToDo addToDoTask(String taskName) throws WooperException {
         if (taskName.isEmpty() || taskName.isBlank()) {
-            throw new WooperException("Woop! Please give the todo a description!");
+            throw new WooperException("Please give the todo a description!");
         }
         ToDo td = new ToDo(taskName);
         taskList.add(td);
@@ -97,7 +97,7 @@ public class TaskManager {
      */
     public Deadline addDeadlineTask(String taskDesc, Temporal dl) throws WooperException {
         if (taskDesc.isEmpty() || taskDesc.isBlank()) {
-            throw new WooperException("Woop! Please give the deadline a description!");
+            throw new WooperException("Please give the deadline a description!");
         }
 
         Deadline td;
@@ -106,7 +106,7 @@ public class TaskManager {
         } else if (dl instanceof LocalDate) {
             td = new Deadline(taskDesc, (LocalDate) dl);
         } else {
-            throw new WooperException("Woop! Invalid deadline date format.");
+            throw new WooperException("Invalid deadline date format.");
         }
         taskList.add(td);
         return td;
@@ -123,7 +123,7 @@ public class TaskManager {
      */
     public Event addEventTask(String taskDesc, Temporal sdl, Temporal edl) throws WooperException {
         if (taskDesc.isEmpty() || taskDesc.isBlank()) {
-            throw new WooperException("Woop! Please give the event a description!");
+            throw new WooperException("Please give the event a description!");
         }
 
         Event td;
@@ -132,7 +132,7 @@ public class TaskManager {
         } else if (sdl instanceof LocalDate && edl instanceof LocalDate) {
             td = new Event(taskDesc, (LocalDate) sdl, (LocalDate) edl);
         } else {
-            throw new WooperException("Woop! Please give same event date format"
+            throw new WooperException("Please give same event date format"
                     + " (DD/MM/YYYY or DD/MM/YYYY HH:mm) for BOTH");
         }
 
@@ -149,7 +149,7 @@ public class TaskManager {
      */
     public Task deleteTask(int taskNo) throws WooperException {
         if (taskNo < 0 || taskNo >= taskList.size()) {
-            throw new WooperException("Woop! Choose a number from the task list!");
+            throw new WooperException("Choose a number from the task list!");
         }
         Task t = taskList.remove(taskNo);
         return t;
@@ -175,7 +175,7 @@ public class TaskManager {
      */
     public ArrayList<Task> findTasks(String taskStr) throws WooperException {
         if (taskStr.isEmpty() || taskStr.isBlank()) {
-            throw new WooperException("Woop! Let me know which task you are trying to find :>");
+            throw new WooperException("Let me know which task you are trying to find :>");
         }
         ArrayList<Task> matchedTL = new ArrayList<>();
         for (int i = 0; i < taskList.size(); i++) {
