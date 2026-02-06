@@ -11,6 +11,10 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import wooper.ui.gui.MainWindow;
 
+/**
+ * Represents a dialog box used to display Wooper's responses in the GUI.
+ * Displays a message label alongside Wooper's image.
+ */
 public class WooperDialogBox extends HBox {
     @FXML
     private Label dialog;
@@ -21,7 +25,8 @@ public class WooperDialogBox extends HBox {
 
     private WooperDialogBox(String text) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(MainWindow.class.getResource("/view/components/WooperDialogBox.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(
+                    MainWindow.class.getResource("/view/components/WooperDialogBox.fxml"));
             fxmlLoader.setController(this);
             fxmlLoader.setRoot(this);
             fxmlLoader.load();

@@ -10,9 +10,10 @@ public class Wooper {
         wooperController = new WooperController();
     }
 
-    public String initWooper(){
+    public String initWooper() {
         return wooperController.init();
     }
+
     /**
      * Generates a response for the user's chat message.
      */

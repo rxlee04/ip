@@ -6,9 +6,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-
 import wooper.ui.gui.MainWindow;
 
+/**
+ * Launches the JavaFX GUI for the Wooper application.
+ */
 public class Main extends Application {
 
     private Wooper wooper = new Wooper();

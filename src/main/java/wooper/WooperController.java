@@ -28,6 +28,11 @@ public class WooperController {
     public WooperController() {
     }
 
+    /**
+     * Returns the greeting message after loading saved tasks from storage.
+     *
+     * @return The greeting message, or an error message if loading fails.
+     */
     public String init() {
         // load data from storage
         try {
