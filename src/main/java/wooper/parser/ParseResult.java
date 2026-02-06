@@ -1,8 +1,8 @@
 package wooper.parser;
 
-import wooper.enums.CommandType;
-
 import java.util.ArrayList;
+
+import wooper.enums.CommandType;
 
 /**
  * Represents the result of parsing a user command.

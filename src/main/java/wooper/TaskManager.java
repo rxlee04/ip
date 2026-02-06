@@ -1,15 +1,15 @@
 package wooper;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.Temporal;
+import java.util.ArrayList;
+
 import wooper.exception.WooperException;
 import wooper.task.Deadline;
 import wooper.task.Event;
 import wooper.task.Task;
 import wooper.task.ToDo;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.temporal.Temporal;
-import java.util.ArrayList;
 
 /**
  * Manages the list of tasks in the Wooper application.
@@ -91,7 +91,7 @@ public class TaskManager {
      * Adds a new deadline task to the task list.
      *
      * @param taskDesc Description of the deadline task.
-     * @param dl Deadline date or date-time of the task.
+     * @param dl       Deadline date or date-time of the task.
      * @return The newly created deadline task.
      * @throws WooperException If the task description is empty or the deadline format is invalid.
      */
@@ -116,8 +116,8 @@ public class TaskManager {
      * Adds a new event task to the task list.
      *
      * @param taskDesc Description of the event task.
-     * @param sdl Start date or date-time of the event.
-     * @param edl End date or date-time of the event.
+     * @param sdl      Start date or date-time of the event.
+     * @param edl      End date or date-time of the event.
      * @return The newly created event task.
      * @throws WooperException If the task description is empty or the date formats do not match.
      */
@@ -132,7 +132,8 @@ public class TaskManager {
         } else if (sdl instanceof LocalDate && edl instanceof LocalDate) {
             td = new Event(taskDesc, (LocalDate) sdl, (LocalDate) edl);
         } else {
-            throw new WooperException("Woop! Please give same event date format (DD/MM/YYYY or DD/MM/YYYY HH:mm) for BOTH");
+            throw new WooperException("Woop! Please give same event date format"
+                    + " (DD/MM/YYYY or DD/MM/YYYY HH:mm) for BOTH");
         }
 
         taskList.add(td);

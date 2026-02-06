@@ -1,13 +1,13 @@
 package wooper.parser;
 
-import org.junit.jupiter.api.Test;
-
-import wooper.enums.CommandType;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
+
+import wooper.enums.CommandType;
 
 public class ParserTest {
     private Parser parser = new Parser();
@@ -59,7 +59,8 @@ public class ParserTest {
     public void getActionAndArguments_validEventInput_returnsEventCommand() {
         ArrayList<String> args = new ArrayList<>(List.of("project meeting", "06/08/2026 14:00", "06/08/2026 16:00"));
         ParseResult expected = new ParseResult(CommandType.EVENT, args);
-        ParseResult actual = parser.getActionAndArguments("event project meeting /from 06/08/2026 14:00 /to 06/08/2026 16:00");
+        ParseResult actual = parser
+                .getActionAndArguments("event project meeting /from 06/08/2026 14:00 /to 06/08/2026 16:00");
         assertEquals(expected.getCommandType(), actual.getCommandType());
         assertEquals(args, actual.getArgs());
     }

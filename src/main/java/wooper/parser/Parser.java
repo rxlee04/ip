@@ -1,8 +1,8 @@
 package wooper.parser;
 
-import wooper.enums.CommandType;
-
 import java.util.ArrayList;
+
+import wooper.enums.CommandType;
 
 /**
  * Parses user input strings into commands and their corresponding arguments.
@@ -55,12 +55,11 @@ public class Parser {
             String taskNoStr = str.substring(str.indexOf("delete") + 7).trim();
             args.add(taskNoStr);
             pr = new ParseResult(CommandType.DELETE, args);
-        }else if (str.toLowerCase().startsWith("find")) {
+        } else if (str.toLowerCase().startsWith("find")) {
             String taskStr = str.substring(str.indexOf("find") + 5).trim();
             args.add(taskStr);
             pr = new ParseResult(CommandType.FIND, args);
-        }
-        else if (str.equalsIgnoreCase("bye")) {
+        } else if (str.equalsIgnoreCase("bye")) {
             pr = new ParseResult(CommandType.BYE);
         } else {
             pr = new ParseResult(CommandType.UNKNOWN);
