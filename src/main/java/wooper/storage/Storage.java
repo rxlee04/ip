@@ -1,5 +1,13 @@
 package wooper.storage;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,14 +18,6 @@ import wooper.task.Event;
 import wooper.task.Task;
 import wooper.task.ToDo;
 import wooper.util.DateTimeUtil;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 /**
  * Loads tasks from and saves tasks to a JSON file on disk.

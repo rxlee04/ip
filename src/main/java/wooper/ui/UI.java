@@ -1,9 +1,9 @@
 package wooper.ui;
 
-import wooper.task.Task;
-
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import wooper.task.Task;
 
 /**
  * Handles user interaction for the Wooper application.

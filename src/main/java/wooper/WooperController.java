@@ -1,5 +1,9 @@
 package wooper;
 
+import java.io.IOException;
+import java.time.temporal.Temporal;
+import java.util.ArrayList;
+
 import wooper.enums.CommandType;
 import wooper.exception.WooperException;
 import wooper.parser.ParseResult;
@@ -8,10 +12,6 @@ import wooper.storage.Storage;
 import wooper.task.Task;
 import wooper.ui.UI;
 import wooper.util.DateTimeUtil;
-
-import java.io.IOException;
-import java.time.temporal.Temporal;
-import java.util.ArrayList;
 
 /**
  * Handles the main control flow of the Wooper application.

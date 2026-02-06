@@ -1,30 +1,39 @@
 package wooper.util;
 
-import wooper.enums.CommandType;
-import wooper.exception.WooperException;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.Temporal;
 
+import wooper.enums.CommandType;
+import wooper.exception.WooperException;
+
 /**
  * Provides utility methods for parsing and formatting dates and date-times.
  */
 public class DateTimeUtil {
 
-    /** Formatter for parsing dates in the format DD/MM/YYYY. */
+    /**
+     * Formatter for parsing dates in the format DD/MM/YYYY.
+     */
     public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-    /** Formatter for parsing date-times in the format DD/MM/YYYY HH:mm. */
+    /**
+     * Formatter for parsing date-times in the format DD/MM/YYYY HH:mm.
+     */
     public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
-    /** Formatter for displaying dates in a user-friendly format. */
+    /**
+     * Formatter for displaying dates in a user-friendly format.
+     */
     public static final DateTimeFormatter DISPLAY_DATE_FORMATTER = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy");
 
-    /** Formatter for displaying date-times in a user-friendly format. */
-    public static final DateTimeFormatter DISPLAY_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm");
+    /**
+     * Formatter for displaying date-times in a user-friendly format.
+     */
+    public static final DateTimeFormatter DISPLAY_DATE_TIME_FORMATTER =
+            DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm");
 
     /**
      * Returns whether the given string represents a date-time value.
@@ -63,7 +72,7 @@ public class DateTimeUtil {
      * Throws an exception if the input is empty or does not match the expected formats.
      *
      * @param dateStr Date or date-time string provided by the user.
-     * @param type Command type that determines the error message context.
+     * @param type    Command type that determines the error message context.
      * @return The parsed date or date-time as a {@link Temporal} object.
      * @throws WooperException If the input is empty or the format is invalid.
      */
