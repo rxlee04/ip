@@ -27,7 +27,7 @@ public class UI {
      * Prints the greeting message shown when the application starts.
      */
     public void printGreetingMessage() {
-        String greetMsg = "Woo-pah! I'm wooper.Wooper\n What can I do for you?";
+        String greetMsg = "Woo-pah! I'm Wooper\n What can I do for you?";
         System.out.println(divider);
         System.out.println(greetMsg);
         System.out.println(divider);
