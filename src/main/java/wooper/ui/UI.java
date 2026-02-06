@@ -1,7 +1,6 @@
 package wooper.ui;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import wooper.task.Task;
 
@@ -11,36 +10,22 @@ import wooper.task.Task;
  * and feedback to the user via standard output.
  */
 public class UI {
-    private final Scanner scanner = new Scanner(System.in);
-    private final String divider = "____________________________________________________________";
-
-    /**
-     * Returns the next command entered by the user.
-     *
-     * @return The user input command as a string.
-     */
-    public String getUserCommand() {
-        return scanner.nextLine();
-    }
-
     /**
      * Prints the greeting message shown when the application starts.
      */
-    public void printGreetingMessage() {
-        String greetMsg = "Woo-pah! I'm Wooper\n What can I do for you?";
-        System.out.println(divider);
-        System.out.println(greetMsg);
-        System.out.println(divider);
+    public String printGreetingMessage() {
+        String greetMsg = "Woo-pah! I'm Wooper\n What can I do for you?" + "\n\n"
+                + "Tell me your tasks — I can help you organise and track them!";
+
+        return greetMsg;
     }
 
     /**
      * Prints the farewell message shown when the application exits.
      */
-    public void printExitMessage() {
+    public String printExitMessage() {
         String exitMsg = "Woop Woop! Hope to see you again soon!";
-        System.out.println(divider);
-        System.out.println(exitMsg);
-        System.out.println(divider);
+        return exitMsg;
     }
 
     /**
@@ -48,13 +33,17 @@ public class UI {
      *
      * @param taskList List of tasks to be displayed.
      */
-    public void printTaskList(ArrayList<Task> taskList) {
-        System.out.println(divider);
-        System.out.println("Here are the tasks in your list:");
-        for (int i = 0; i < taskList.size(); i++) {
-            System.out.println((i + 1) + ". " + taskList.get(i).toString());
+    public String printTaskList(ArrayList<Task> taskList) {
+        String str = "";
+        if (taskList.isEmpty()) {
+            str = "Woop! No matching tasks found.";
+        } else {
+            str = "Here are the tasks in your list:";
+            for (int i = 0; i < taskList.size(); i++) {
+                str += "\n " + (i + 1) + ". " + taskList.get(i).toString();
+            }
         }
-        System.out.println(divider);
+        return str;
     }
 
     /**
@@ -62,11 +51,9 @@ public class UI {
      *
      * @param t The task that was marked as completed.
      */
-    public void printMarkTaskDoneMessage(Task t) {
-        System.out.println(divider);
-        System.out.println("Nice! I've marked this task as done:");
-        System.out.println(t.toString());
-        System.out.println(divider);
+    public String printMarkTaskDoneMessage(Task t) {
+        String str = "Nice! I've marked this task as done:" + "\n" + t.toString();
+        return str;
     }
 
     /**
@@ -74,40 +61,33 @@ public class UI {
      *
      * @param t The task that was marked as not completed.
      */
-    public void printUnmarkTaskDoneMessage(Task t) {
-        System.out.println(divider);
-        System.out.println("OK, I've marked this task as not done yet:");
-        System.out.println(t.toString());
-        System.out.println(divider);
+    public String printUnmarkTaskDoneMessage(Task t) {
+        String str = "OK, I've marked this task as not done yet:" + "\n" + t.toString();
+        return str;
     }
 
     /**
      * Prints a confirmation message indicating that a task has been added.
      *
-     * @param t The task that was added.
+     * @param t            The task that was added.
      * @param taskListSize The total number of tasks after the addition.
      */
-    public void printAddTaskMessage(Task t, int taskListSize) {
-        String addTaskMsg = "Got it. I've added this task:";
-        System.out.println(divider);
-        System.out.println(addTaskMsg);
-        System.out.println(t.toString());
-        System.out.println("Now you have " + taskListSize + " tasks in the list.");
-        System.out.println(divider);
+    public String printAddTaskMessage(Task t, int taskListSize) {
+        String str = "Got it. I've added this task:" + "\n" + t.toString() + "\n"
+                + "Now you have " + taskListSize + " tasks in the list.";
+        return str;
     }
 
     /**
      * Prints a confirmation message indicating that a task has been deleted.
      *
-     * @param t The task that was removed.
+     * @param t            The task that was removed.
      * @param taskListSize The total number of tasks after deletion.
      */
-    public void printDeleteTaskMessage(Task t, int taskListSize) {
-        System.out.println(divider);
-        System.out.println("Noted. I've removed this task:");
-        System.out.println(t.toString());
-        System.out.println("Now you have " + taskListSize + " tasks in the list.");
-        System.out.println(divider);
+    public String printDeleteTaskMessage(Task t, int taskListSize) {
+        String str = "Noted. I've removed this task:" + "\n" + t.toString() + "\n"
+                + "Now you have " + taskListSize + " tasks in the list.";
+        return str;
     }
 
     /**
@@ -115,10 +95,9 @@ public class UI {
      *
      * @param err The error message to be displayed.
      */
-    public void printErrorMessage(String err) {
-        System.out.println(divider);
-        System.out.println(err);
-        System.out.println(divider);
+    public String printErrorMessage(String err) {
+        String str = "Woop! " + err;
+        return str;
     }
 
     /**
@@ -127,15 +106,15 @@ public class UI {
      *
      * @param taskList List of tasks that matched the search criteria.
      */
-    public void printFindTasksMessage(ArrayList<Task> taskList) {
-        System.out.println(divider);
+    public String printFindTasksMessage(ArrayList<Task> taskList) {
+        String str = "";
         if (taskList.isEmpty()) {
-            System.out.println("Woop! No matching tasks found.");
+            str = "Woop! No matching tasks found.";
         } else {
             for (int i = 0; i < taskList.size(); i++) {
-                System.out.println((i + 1) + ". " + taskList.get(i).toString());
+                str += (i + 1) + ". " + taskList.get(i).toString() + "\n";
             }
         }
-        System.out.println(divider);
+        return str;
     }
 }
