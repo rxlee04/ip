@@ -78,10 +78,11 @@ public class Storage {
         // create folder if missing
         Files.createDirectories(filePath.getParent());
 
-        JSONArray jsonArray = new JSONArray();
-        for (int i = 0; i < taskList.size(); i++) {
-            jsonArray.put(taskToJson(taskList.get(i)));
-        }
+        JSONArray jsonArray = new JSONArray(
+                taskList.stream()
+                        .map(this::taskToJson)
+                        .toList()
+        );
 
         // write to file
         Files.writeString(filePath, jsonArray.toString(2));
