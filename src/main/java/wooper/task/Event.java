@@ -55,11 +55,21 @@ public class Event extends Task {
                 : startDate.toString();
     }
 
+    /**
+     * Updates the start date and time of this event.
+     *
+     * @param inStartDT Start date and time of the event.
+     */
     public void setEventStart(LocalDateTime inStartDT) {
         startDateTime = inStartDT;
         startDate = null;
     }
 
+    /**
+     * Updates the start date of this event.
+     *
+     * @param inStartDate Start date of the event.
+     */
     public void setEventStart(LocalDate inStartDate) {
         startDate = inStartDate;
         startDateTime = null;
@@ -76,11 +86,21 @@ public class Event extends Task {
                 : endDate.toString();
     }
 
+    /**
+     * Updates the end date and time of this event.
+     *
+     * @param inEndDT End date and time of the event.
+     */
     public void setEventEnd(LocalDateTime inEndDT) {
         endDateTime = inEndDT;
         endDate = null;
     }
 
+    /**
+     * Updates the end date of this event.
+     *
+     * @param inEndDate End date of the event.
+     */
     public void setEventEnd(LocalDate inEndDate) {
         endDate = inEndDate;
         endDateTime = null;

@@ -197,6 +197,14 @@ public class TaskManager {
         return matchedTL;
     }
 
+    /**
+     * Updates fields of an existing task using the parsed update arguments.
+     *
+     * @param taskNo Index of the task to update.
+     * @param args   Parsed arguments containing task type and updated fields.
+     * @return The updated task.
+     * @throws WooperException If the task index is invalid or the update arguments are invalid.
+     */
     public Task updateTask(int taskNo, ArrayList<String> args) throws WooperException {
         validateTaskIndex(taskNo);
         validateUpdateArgs(args);

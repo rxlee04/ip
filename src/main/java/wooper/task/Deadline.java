@@ -29,7 +29,7 @@ public class Deadline extends Task {
      * Creates a deadline task with a specific date.
      *
      * @param inTaskName Description of the deadline task.
-     * @param inDate Date by which the task must be completed.
+     * @param inDate     Date by which the task must be completed.
      */
     public Deadline(String inTaskName, LocalDate inDate) {
         super(inTaskName);
@@ -37,13 +37,18 @@ public class Deadline extends Task {
         datetime = null;
     }
 
+    /**
+     * Updates the deadline of this task to the specified date and time.
+     *
+     * @param inDatetime Date and time by which the task must be completed.
+     */
     public void setDeadline(LocalDateTime inDatetime) {
         datetime = inDatetime;
         date = null;
     }
 
     /**
-     * Creates a deadline task with a specific date.
+     * Updates the deadline of this task to the specified date.
      *
      * @param inDate Date by which the task must be completed.
      */

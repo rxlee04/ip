@@ -118,11 +118,19 @@ public class UI {
         return str;
     }
 
+    /**
+     * Prints a confirmation message indicating that a task has been updated.
+     *
+     * @param t The task that was updated.
+     */
     public String printUpdateTaskMessage(Task t) {
         String str = "Woo-pah! I've updated this task:" + "\n" + t.toString();
         return str;
     }
 
+    /**
+     * Prints a message indicating that the command entered is not recognised.
+     */
     public String printUnknownCommandMessage() {
         return "Wooooo-pah? I don't understand this command.";
     }
