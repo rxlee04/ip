@@ -90,7 +90,8 @@ public class TaskManager {
         ToDo tDo = new ToDo(taskName);
         taskList.add(tDo);
         assert taskList.get(taskList.size() - 1) == tDo : "Newly added ToDo should be at end of task list";
-        return tDo;     
+
+        return tDo;
     }
 
     /**
@@ -114,11 +115,11 @@ public class TaskManager {
         } else {
             throw new WooperException("Invalid deadline date format.");
         }
-      
+
         taskList.add(tDeadline);
         assert taskList.get(taskList.size() - 1) == tDeadline : "Newly added Deadline task should be in task list";
 
-        return td;
+        return tDeadline;
     }
 
     /**
@@ -138,7 +139,7 @@ public class TaskManager {
         Event tEvent;
         assert sdl != null && edl != null : "Event dates should not be null";
         assert sdl.getClass() == edl.getClass() : "Start and end dates should be same type";
-      
+
         if (sdl instanceof LocalDateTime && edl instanceof LocalDateTime) {
             tEvent = new Event(taskDesc, (LocalDateTime) sdl, (LocalDateTime) edl);
         } else if (sdl instanceof LocalDate && edl instanceof LocalDate) {
@@ -150,7 +151,7 @@ public class TaskManager {
 
         taskList.add(tEvent);
         assert taskList.get(taskList.size() - 1) == tEvent : "Newly added Event task should be in task list";
-      
+
         return tEvent;
     }
 
