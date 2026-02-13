@@ -78,7 +78,7 @@ public class DateTimeUtil {
      */
     public static Temporal parseDateOrDateTime(String dateStr, CommandType type) throws WooperException {
         // check if user gave date/datetime
-        if (dateStr.isEmpty()) {
+        if (dateStr == null || dateStr.isBlank()) {
             if (type == CommandType.DEADLINE) {
                 throw new WooperException("Woop! Please give a deadline!");
             } else if (type == CommandType.EVENT) {
@@ -90,13 +90,15 @@ public class DateTimeUtil {
         try {
             return LocalDateTime.parse(dateStr, DATE_TIME_FORMATTER);
         } catch (DateTimeParseException e) {
-            // if user give date only, parse string to date
-            try {
-                return LocalDate.parse(dateStr, DATE_FORMATTER);
-            } catch (DateTimeParseException ex) {
-                throw new WooperException(
-                        "Woop! Date must be DD/MM/YYYY or DD/MM/YYYY HH:mm");
-            }
+            // error will be thrown if the next try catch also fails
+        }
+
+        // if user give date only, parse string to date
+        try {
+            return LocalDate.parse(dateStr, DATE_FORMATTER);
+        } catch (DateTimeParseException ex) {
+            throw new WooperException(
+                    "Woop! Date must be DD/MM/YYYY or DD/MM/YYYY HH:mm");
         }
     }
 }

@@ -82,9 +82,9 @@ public class TaskManager {
         if (taskName.isEmpty() || taskName.isBlank()) {
             throw new WooperException("Please give the todo a description!");
         }
-        ToDo td = new ToDo(taskName);
-        taskList.add(td);
-        return td;
+        ToDo tDo = new ToDo(taskName);
+        taskList.add(tDo);
+        return tDo;
     }
 
     /**
@@ -100,16 +100,16 @@ public class TaskManager {
             throw new WooperException("Please give the deadline a description!");
         }
 
-        Deadline td;
+        Deadline tDeadline;
         if (dl instanceof LocalDateTime) {
-            td = new Deadline(taskDesc, (LocalDateTime) dl);
+            tDeadline = new Deadline(taskDesc, (LocalDateTime) dl);
         } else if (dl instanceof LocalDate) {
-            td = new Deadline(taskDesc, (LocalDate) dl);
+            tDeadline = new Deadline(taskDesc, (LocalDate) dl);
         } else {
             throw new WooperException("Invalid deadline date format.");
         }
-        taskList.add(td);
-        return td;
+        taskList.add(tDeadline);
+        return tDeadline;
     }
 
     /**
@@ -126,18 +126,18 @@ public class TaskManager {
             throw new WooperException("Please give the event a description!");
         }
 
-        Event td;
+        Event tEvent;
         if (sdl instanceof LocalDateTime && edl instanceof LocalDateTime) {
-            td = new Event(taskDesc, (LocalDateTime) sdl, (LocalDateTime) edl);
+            tEvent = new Event(taskDesc, (LocalDateTime) sdl, (LocalDateTime) edl);
         } else if (sdl instanceof LocalDate && edl instanceof LocalDate) {
-            td = new Event(taskDesc, (LocalDate) sdl, (LocalDate) edl);
+            tEvent = new Event(taskDesc, (LocalDate) sdl, (LocalDate) edl);
         } else {
             throw new WooperException("Please give same event date format"
                     + " (DD/MM/YYYY or DD/MM/YYYY HH:mm) for BOTH");
         }
 
-        taskList.add(td);
-        return td;
+        taskList.add(tEvent);
+        return tEvent;
     }
 
     /**
@@ -161,9 +161,7 @@ public class TaskManager {
      * @param inTaskList List of tasks to be loaded.
      */
     public void loadTaskList(ArrayList<Task> inTaskList) {
-        for (int i = 0; i < inTaskList.size(); i++) {
-            taskList.add(inTaskList.get(i));
-        }
+        taskList.addAll(inTaskList);
     }
 
     /**

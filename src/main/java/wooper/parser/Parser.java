@@ -9,6 +9,10 @@ import wooper.enums.CommandType;
  */
 public class Parser {
 
+    private static final String BY = "/by";
+    private static final String FROM = "/from";
+    private static final String TO = "/to";
+
     /**
      * Returns the command type and arguments parsed from the given user input.
      * Identifies the command keyword and extracts any required arguments based on
@@ -19,51 +23,85 @@ public class Parser {
      * @return A {@link ParseResult} containing the parsed command type and arguments.
      */
     public ParseResult getActionAndArguments(String str) {
-        str = str.trim();
-        ParseResult pr;
-        ArrayList<String> args = new ArrayList<>();
-        if (str.equalsIgnoreCase("list")) {
-            pr = new ParseResult(CommandType.LIST);
-        } else if (str.toLowerCase().startsWith("mark")) {
-            String taskNoStr = str.substring(str.indexOf("mark") + 5).trim();
-            args.add(taskNoStr);
-            pr = new ParseResult(CommandType.MARK, args);
-        } else if (str.toLowerCase().startsWith("unmark")) {
-            String taskNoStr = str.substring(str.indexOf("unmark") + 7).trim();
-            args.add(taskNoStr);
-            pr = new ParseResult(CommandType.UNMARK, args);
-        } else if (str.toLowerCase().startsWith("todo")) {
-            String taskStr = str.substring(str.indexOf("todo") + 5).trim();
-            args.add(taskStr);
-            pr = new ParseResult(CommandType.TODO, args);
-        } else if (str.toLowerCase().startsWith("deadline")) {
-            String taskStr = str.substring(str.indexOf("deadline") + 9, str.indexOf("/by")).trim();
-            String dl = str.substring(str.indexOf("/by") + 4).trim();
-            args.add(taskStr);
-            args.add(dl);
-            pr = new ParseResult(CommandType.DEADLINE, args);
-        } else if (str.toLowerCase().startsWith("event")) {
-            String taskStr = str.substring(str.indexOf("event") + 6, str.indexOf("/from")).trim();
-            String sdl = str.substring(str.indexOf("/from") + 6, str.indexOf("/to")).trim();
-            String edl = str.substring(str.indexOf("/to") + 4).trim();
-
-            args.add(taskStr);
-            args.add(sdl);
-            args.add(edl);
-            pr = new ParseResult(CommandType.EVENT, args);
-        } else if (str.toLowerCase().startsWith("delete")) {
-            String taskNoStr = str.substring(str.indexOf("delete") + 7).trim();
-            args.add(taskNoStr);
-            pr = new ParseResult(CommandType.DELETE, args);
-        } else if (str.toLowerCase().startsWith("find")) {
-            String taskStr = str.substring(str.indexOf("find") + 5).trim();
-            args.add(taskStr);
-            pr = new ParseResult(CommandType.FIND, args);
-        } else if (str.equalsIgnoreCase("bye")) {
-            pr = new ParseResult(CommandType.BYE);
-        } else {
-            pr = new ParseResult(CommandType.UNKNOWN);
+        if (str == null) {
+            return new ParseResult(CommandType.UNKNOWN, new ArrayList<>());
         }
-        return pr;
+
+        str = str.trim();
+        ArrayList<String> args = new ArrayList<>();
+
+        if (str.isEmpty()) {
+            return new ParseResult(CommandType.UNKNOWN, args);
+        }
+
+        String[] parts = str.split("\\s+", 2);
+        String cmd = parts[0].toLowerCase();
+        String rest = (parts.length > 1) ? parts[1].trim() : "";
+
+        switch (cmd) {
+        case "list":
+            return new ParseResult(CommandType.LIST, args);
+        case "mark":
+            args.add(rest);
+            return new ParseResult(CommandType.MARK, args);
+        case "unmark":
+            args.add(rest);
+            return new ParseResult(CommandType.UNMARK, args);
+        case "todo":
+            args.add(rest);
+            return new ParseResult(CommandType.TODO, args);
+        case "deadline":
+            parseDeadlineArgs(rest, args);
+            return new ParseResult(CommandType.DEADLINE, args);
+        case "event":
+            parseEventArgs(rest, args);
+            return new ParseResult(CommandType.EVENT, args);
+        case "delete":
+            args.add(rest);
+            return new ParseResult(CommandType.DELETE, args);
+        case "find":
+            args.add(rest);
+            return new ParseResult(CommandType.FIND, args);
+        case "bye":
+            return new ParseResult(CommandType.BYE, args);
+        default:
+            return new ParseResult(CommandType.UNKNOWN, args);
+        }
+    }
+
+    private void parseDeadlineArgs(String rest, ArrayList<String> args) {
+        int byIdx = rest.toLowerCase().indexOf(BY);
+
+        if (byIdx == -1) {
+            args.add(rest.trim());
+            args.add("");
+            return;
+        }
+
+        String desc = rest.substring(0, byIdx).trim();
+        String by = rest.substring(byIdx + BY.length()).trim(); // 3 = length of "/by"
+        args.add(desc);
+        args.add(by);
+    }
+
+    private void parseEventArgs(String rest, ArrayList<String> args) {
+        int fromIdx = rest.toLowerCase().indexOf(FROM);
+        int toIdx = rest.toLowerCase().indexOf(TO);
+
+        // Missing markers or wrong order, fill blanks so later code throws a clear error
+        if (fromIdx == -1 || toIdx == -1 || toIdx < fromIdx + FROM.length()) {
+            args.add(rest.trim()); // description best-effort
+            args.add("");
+            args.add("");
+            return;
+        }
+
+        String desc = rest.substring(0, fromIdx).trim();
+        String from = rest.substring(fromIdx + FROM.length(), toIdx).trim(); // 5 = length of "/from"
+        String to = rest.substring(toIdx + TO.length()).trim(); // 3 = length of "/to"
+
+        args.add(desc);
+        args.add(from);
+        args.add(to);
     }
 }

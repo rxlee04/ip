@@ -54,75 +54,116 @@ public class WooperController {
      */
     public String handleUserInput(String userInput) {
         // formatted user input
-        ParseResult pr;
-        ArrayList<String> args = null;
-        CommandType action = null;
-
-
-        pr = parser.getActionAndArguments(userInput);
-        action = pr.getCommandType();
-        args = pr.getArgs();
+        ParseResult pr = parser.getActionAndArguments(userInput);
+        CommandType action = pr.getCommandType();
+        ArrayList<String> args = pr.getArgs();
 
         try {
-            if (action == CommandType.LIST) {
-                return ui.printTaskList(taskManager.getAllTasks());
-            } else if (action == CommandType.MARK) {
-                int taskNo = Integer.parseInt(args.get(0)) - 1; // parse task no string -> int
-                Task t = taskManager.markTaskDone(taskNo);
-
-                // print and save
-                storage.save(taskManager.getAllTasks());
-                return ui.printMarkTaskDoneMessage(t);
-            } else if (action == CommandType.UNMARK) {
-                int taskNo = Integer.parseInt(pr.getArgs().get(0)) - 1; // parse task no string -> int
-                Task t = taskManager.unmarkTaskDone(taskNo);
-
-                // print and save
-                storage.save(taskManager.getAllTasks());
-                return ui.printUnmarkTaskDoneMessage(t);
-            } else if (action == CommandType.TODO) {
-                String taskName = pr.getArgs().get(0);
-                Task t = taskManager.addToDoTask(taskName);
-
-                // print and save
-                storage.save(taskManager.getAllTasks());
-                return ui.printAddTaskMessage(t, taskManager.getTaskListSize());
-            } else if (action == CommandType.DEADLINE) {
-                String taskDesc = pr.getArgs().get(0);
-                Temporal dl = DateTimeUtil.parseDateOrDateTime(pr.getArgs().get(1), CommandType.DEADLINE);
-                Task t = taskManager.addDeadlineTask(taskDesc, dl);
-
-                // print and save
-                storage.save(taskManager.getAllTasks());
-                return ui.printAddTaskMessage(t, taskManager.getTaskListSize());
-            } else if (action == CommandType.EVENT) {
-                String taskDesc = pr.getArgs().get(0);
-                Temporal sdl = DateTimeUtil.parseDateOrDateTime(pr.getArgs().get(1), CommandType.EVENT);
-                Temporal edl = DateTimeUtil.parseDateOrDateTime(pr.getArgs().get(2), CommandType.EVENT);
-                Task t = taskManager.addEventTask(taskDesc, sdl, edl);
-
-                // print and save
-                storage.save(taskManager.getAllTasks());
-                return ui.printAddTaskMessage(t, taskManager.getTaskListSize());
-            } else if (action == CommandType.DELETE) {
-                int taskNo = Integer.parseInt(pr.getArgs().get(0)) - 1;
-                Task t = taskManager.deleteTask(taskNo);
-
-                // print and save
-                storage.save(taskManager.getAllTasks());
-                return ui.printDeleteTaskMessage(t, taskManager.getTaskListSize());
-            } else if (action == CommandType.FIND) {
-                ArrayList<Task> matchedTL = taskManager.findTasks(pr.getArgs().get(0));
-                return ui.printFindTasksMessage(matchedTL);
-            } else if (action == CommandType.BYE) {
-                return ui.printExitMessage();
-            } else {
-                return "Wooooo-pah? I don't understand this command.";
+            switch (action) {
+            case LIST:
+                return handleList();
+            case MARK:
+                return handleMark(args);
+            case UNMARK:
+                return handleUnmark(args);
+            case TODO:
+                return handleTodo(args);
+            case DEADLINE:
+                return handleDeadline(args);
+            case EVENT:
+                return handleEvent(args);
+            case DELETE:
+                return handleDelete(args);
+            case FIND:
+                return handleFind(args);
+            case BYE:
+                return handleBye();
+            case UNKNOWN:
+            default:
+                return handleUnknown();
             }
         } catch (WooperException e) {
             return ui.printErrorMessage(e.getMessage());
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private String handleList() {
+        return ui.printTaskList(taskManager.getAllTasks());
+    }
+
+    private String handleMark(ArrayList<String> args) throws WooperException, IOException {
+        int taskNo = parseTaskIndex(args);
+        Task t = taskManager.markTaskDone(taskNo);
+        saveAllTasks();
+        return ui.printMarkTaskDoneMessage(t);
+    }
+
+    private String handleUnmark(ArrayList<String> args) throws WooperException, IOException {
+        int taskNo = parseTaskIndex(args);
+        Task t = taskManager.unmarkTaskDone(taskNo);
+        saveAllTasks();
+        return ui.printUnmarkTaskDoneMessage(t);
+    }
+
+    private String handleTodo(ArrayList<String> args) throws WooperException, IOException {
+        Task t = taskManager.addToDoTask(args.get(0));
+        saveAllTasks();
+        return ui.printAddTaskMessage(t, taskManager.getTaskListSize());
+    }
+
+    private String handleDeadline(ArrayList<String> args) throws WooperException, IOException {
+        String taskDesc = args.get(0);
+        Temporal dl = DateTimeUtil.parseDateOrDateTime(args.get(1), CommandType.DEADLINE);
+        Task t = taskManager.addDeadlineTask(taskDesc, dl);
+        saveAllTasks();
+        return ui.printAddTaskMessage(t, taskManager.getTaskListSize());
+    }
+
+    private String handleEvent(ArrayList<String> args) throws WooperException, IOException {
+        String taskDesc = args.get(0);
+        Temporal start = DateTimeUtil.parseDateOrDateTime(args.get(1), CommandType.EVENT);
+        Temporal end = DateTimeUtil.parseDateOrDateTime(args.get(2), CommandType.EVENT);
+        Task t = taskManager.addEventTask(taskDesc, start, end);
+        saveAllTasks();
+        return ui.printAddTaskMessage(t, taskManager.getTaskListSize());
+    }
+
+    private String handleDelete(ArrayList<String> args) throws WooperException, IOException {
+        int taskNo = parseTaskIndex(args);
+        Task t = taskManager.deleteTask(taskNo);
+        saveAllTasks();
+        return ui.printDeleteTaskMessage(t, taskManager.getTaskListSize());
+    }
+
+    private String handleFind(ArrayList<String> args) throws WooperException {
+        ArrayList<Task> matchedTL = taskManager.findTasks(args.get(0));
+        return ui.printFindTasksMessage(matchedTL);
+    }
+
+    private String handleBye() {
+        return ui.printExitMessage();
+    }
+
+    private String handleUnknown() {
+        return ui.printUnknownCommandMessage();
+    }
+
+    private void saveAllTasks() throws IOException {
+        storage.save(taskManager.getAllTasks());
+    }
+
+    private int parseTaskIndex(ArrayList<String> args) throws WooperException {
+        if (args == null || args.isEmpty() || args.get(0).isEmpty()) {
+            throw new WooperException("Task number is missing.");
+        }
+
+        try {
+            int oneBased = Integer.parseInt(args.get(0));
+            return oneBased - 1;
+        } catch (NumberFormatException e) {
+            throw new WooperException("Task number must be a valid integer.");
         }
     }
 }
