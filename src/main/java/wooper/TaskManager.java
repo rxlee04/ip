@@ -6,11 +6,13 @@ import java.time.temporal.Temporal;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+import wooper.enums.CommandType;
 import wooper.exception.WooperException;
 import wooper.task.Deadline;
 import wooper.task.Event;
 import wooper.task.Task;
 import wooper.task.ToDo;
+import wooper.util.DateTimeUtil;
 
 /**
  * Manages the list of tasks in the Wooper application.
@@ -48,9 +50,7 @@ public class TaskManager {
      * @throws WooperException If the task index is out of bounds.
      */
     public Task markTaskDone(int taskNo) throws WooperException {
-        if (taskNo < 0 || taskNo >= taskList.size()) {
-            throw new WooperException("Choose a number from the task list!");
-        }
+        validateTaskIndex(taskNo);
         Task t = taskList.get(taskNo);
         assert t != null : "Retrieved task should not be null";
 
@@ -66,9 +66,7 @@ public class TaskManager {
      * @throws WooperException If the task index is out of bounds.
      */
     public Task unmarkTaskDone(int taskNo) throws WooperException {
-        if (taskNo < 0 || taskNo >= taskList.size()) {
-            throw new WooperException("Choose a number from the task list!");
-        }
+        validateTaskIndex(taskNo);
         Task t = taskList.get(taskNo);
         assert t != null : "Retrieved task should not be null";
 
@@ -164,9 +162,7 @@ public class TaskManager {
      * @throws WooperException If the task index is out of bounds.
      */
     public Task deleteTask(int taskNo) throws WooperException {
-        if (taskNo < 0 || taskNo >= taskList.size()) {
-            throw new WooperException("Choose a number from the task list!");
-        }
+        validateTaskIndex(taskNo);
         Task t = taskList.remove(taskNo);
         assert t != null : "Retrieved task should not be null";
 
@@ -194,10 +190,155 @@ public class TaskManager {
         if (taskStr.isEmpty() || taskStr.isBlank()) {
             throw new WooperException("Let me know which task you are trying to find :>");
         }
-
+        String taskStrLower = taskStr.toLowerCase();
         ArrayList<Task> matchedTL = taskList.stream()
-                .filter(t -> t.getTaskName().toLowerCase().contains(taskStr.toLowerCase()))
+                .filter(t -> t.getTaskName().toLowerCase().contains(taskStrLower))
                 .collect(Collectors.toCollection(ArrayList::new));
         return matchedTL;
+    }
+
+    public Task updateTask(int taskNo, ArrayList<String> args) throws WooperException {
+        validateTaskIndex(taskNo);
+        validateUpdateArgs(args);
+
+        Task task = taskList.get(taskNo);
+        String inputType = args.get(1).trim().toLowerCase();
+
+        //check tasktype exist
+        if (inputType.isEmpty()) {
+            throw new WooperException("Please state the task type.");
+        }
+
+        //check if tasktype match
+        String actualType = getTaskTypeName(task);
+        if (!actualType.equals(inputType)) {
+            throw new WooperException("Please resend the update with the correct task type: " + actualType);
+        }
+
+        String taskName = args.get(2).trim();
+        String by = args.get(3).trim();
+        String from = args.get(4).trim();
+        String to = args.get(5).trim();
+
+        if (taskName.isEmpty() && by.isEmpty() && from.isEmpty() && to.isEmpty()) {
+            throw new WooperException("Please specify at least one field to update.");
+        }
+
+        switch (actualType) {
+        case "todo":
+            updateTodo((ToDo) task, taskName, by, from, to);
+            break;
+        case "deadline":
+            updateDeadline((Deadline) task, taskName, by, from, to);
+            break;
+        case "event":
+            updateEvent((Event) task, taskName, by, from, to);
+            break;
+        default:
+            throw new WooperException("Unsupported task type for update.");
+        }
+        return task;
+    }
+
+    private void validateTaskIndex(int taskNo) throws WooperException {
+        if (taskNo < 0 || taskNo >= taskList.size()) {
+            throw new WooperException("Choose a number from the task list!");
+        }
+    }
+
+    private String getTaskTypeName(Task task) {
+        if (task instanceof wooper.task.ToDo) {
+            return "todo";
+        }
+
+        if (task instanceof wooper.task.Deadline) {
+            return "deadline";
+        }
+
+        if (task instanceof wooper.task.Event) {
+            return "event";
+        }
+
+        return "task";
+    }
+
+    private void validateUpdateArgs(ArrayList<String> args) throws WooperException {
+        if (args == null || args.size() < 6) {
+            throw new WooperException(
+                    "Invalid update format.\n"
+                            + "Examples:\n"
+                            + "update 1 /taskType todo /taskName newName\n"
+                            + "update 1 /taskType deadline /by 06/06/2026\n"
+                            + "update 1 /taskType event /from 02/02/2026 14:00 /to 02/02/2026 16:00");
+        }
+    }
+
+    private void updateTodo(ToDo task, String taskName, String by, String from, String to) throws WooperException {
+        if (!by.isEmpty() || !from.isEmpty() || !to.isEmpty()) {
+            throw new WooperException("Todo only supports /taskName update.");
+        }
+        if (!taskName.isEmpty()) {
+            task.setTaskName(taskName);
+        }
+    }
+
+    private void updateDeadline(Deadline task, String taskName, String by, String from, String to)
+            throws WooperException {
+
+        if (!from.isEmpty() || !to.isEmpty()) {
+            throw new WooperException("Deadline does not support /from or /to.");
+        }
+
+        if (!taskName.isEmpty()) {
+            task.setTaskName(taskName);
+        }
+
+        if (!by.isEmpty()) {
+            Temporal dl = DateTimeUtil.parseDateOrDateTime(by, CommandType.DEADLINE);
+            if (dl instanceof LocalDateTime) {
+                task.setDeadline((LocalDateTime) dl);
+            } else if (dl instanceof LocalDate) {
+                task.setDeadline((LocalDate) dl);
+            } else {
+                throw new WooperException("Invalid deadline date format.");
+            }
+        }
+    }
+
+    private void updateEvent(Event task, String taskName, String by, String from, String to)
+            throws WooperException {
+
+        if (!by.isEmpty()) {
+            throw new WooperException("Event does not support /by.");
+        }
+
+        if (!taskName.isEmpty()) {
+            task.setTaskName(taskName);
+        }
+
+        boolean hasFrom = !from.isEmpty();
+        boolean hasTo = !to.isEmpty();
+        if (hasFrom != hasTo) {
+            throw new WooperException("Event update requires BOTH /from and /to together.");
+        }
+
+        if (hasFrom) {
+            Temporal start = DateTimeUtil.parseDateOrDateTime(from, CommandType.EVENT);
+            Temporal end = DateTimeUtil.parseDateOrDateTime(to, CommandType.EVENT);
+
+            if (start.getClass() != end.getClass()) {
+                throw new WooperException("Please use the same event date format for /from and /to.");
+            }
+
+            if (start instanceof LocalDateTime) {
+                task.setEventStart((LocalDateTime) start);
+                task.setEventEnd((LocalDateTime) end);
+            } else if (start instanceof LocalDate) {
+                task.setEventStart((LocalDate) start);
+                task.setEventEnd((LocalDate) end);
+            } else {
+                throw new WooperException("Invalid event date format.");
+            }
+        }
     }
 }

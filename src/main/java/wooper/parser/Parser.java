@@ -12,6 +12,7 @@ public class Parser {
     private static final String BY = "/by";
     private static final String FROM = "/from";
     private static final String TO = "/to";
+    private static final String TASK_TYPE = "/taskType";
 
     /**
      * Returns the command type and arguments parsed from the given user input.
@@ -62,6 +63,9 @@ public class Parser {
         case "find":
             args.add(rest);
             return new ParseResult(CommandType.FIND, args);
+        case "update":
+            parseUpdateArgs(rest, args);
+            return new ParseResult(CommandType.UPDATE, args);
         case "bye":
             return new ParseResult(CommandType.BYE, args);
         default:
@@ -79,7 +83,7 @@ public class Parser {
         }
 
         String desc = rest.substring(0, byIdx).trim();
-        String by = rest.substring(byIdx + BY.length()).trim(); // 3 = length of "/by"
+        String by = rest.substring(byIdx + BY.length()).trim();
         args.add(desc);
         args.add(by);
     }
@@ -97,11 +101,71 @@ public class Parser {
         }
 
         String desc = rest.substring(0, fromIdx).trim();
-        String from = rest.substring(fromIdx + FROM.length(), toIdx).trim(); // 5 = length of "/from"
-        String to = rest.substring(toIdx + TO.length()).trim(); // 3 = length of "/to"
+        String from = rest.substring(fromIdx + FROM.length(), toIdx).trim();
+        String to = rest.substring(toIdx + TO.length()).trim();
 
         args.add(desc);
         args.add(from);
         args.add(to);
     }
+
+    private void parseUpdateArgs(String rest, ArrayList<String> args) {
+        rest = rest.trim();
+
+        // 1) Extract taskNo (first token)
+        if (rest.isEmpty()) {
+            args.add(""); // taskNo
+            args.add(""); // taskType
+            args.add(""); // taskName
+            args.add(""); // by
+            args.add(""); // from
+            args.add(""); // to
+            return;
+        }
+
+        int firstSpace = rest.indexOf(' ');
+        String taskNo = (firstSpace == -1) ? rest : rest.substring(0, firstSpace).trim();
+        args.add(taskNo);
+
+        String afterNo = (firstSpace == -1) ? "" : rest.substring(firstSpace).trim();
+
+        // 2) Extract all flags (missing -> "")
+        String taskType = extractFlagValue(afterNo, "/tasktype");
+        String taskName = extractFlagValue(afterNo, "/taskname");
+        String by = extractFlagValue(afterNo, "/by");
+        String from = extractFlagValue(afterNo, "/from");
+        String to = extractFlagValue(afterNo, "/to");
+
+        args.add(taskType);
+        args.add(taskName);
+        args.add(by);
+        args.add(from);
+        args.add(to);
+    }
+
+    private String extractFlagValue(String rest, String flag) {
+        String lower = rest.toLowerCase();
+        int flagIdx = lower.indexOf(flag);
+        if (flagIdx == -1) {
+            return "";
+        }
+
+        // start right after "/tasktype"
+        int start = flagIdx + flag.length();
+        if (start >= rest.length()) {
+            return "";
+        }
+
+        String afterFlag = rest.substring(start).trim();
+        if (afterFlag.isEmpty()) {
+            return "";
+        }
+
+        // value ends before next " /"
+        int nextFlagIdx = afterFlag.indexOf(" /");
+        String value = (nextFlagIdx == -1) ? afterFlag : afterFlag.substring(0, nextFlagIdx);
+
+        return value.trim();
+    }
+
 }

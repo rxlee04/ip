@@ -37,6 +37,21 @@ public class Deadline extends Task {
         datetime = null;
     }
 
+    public void setDeadline(LocalDateTime inDatetime) {
+        datetime = inDatetime;
+        date = null;
+    }
+
+    /**
+     * Creates a deadline task with a specific date.
+     *
+     * @param inDate Date by which the task must be completed.
+     */
+    public void setDeadline(LocalDate inDate) {
+        date = inDate;
+        datetime = null;
+    }
+
     /**
      * Returns the deadline of the task as a string.
      *

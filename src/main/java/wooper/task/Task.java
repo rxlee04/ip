@@ -20,6 +20,10 @@ public class Task {
         return taskName;
     }
 
+    public void setTaskName(String inTaskName) {
+        taskName = inTaskName;
+    }
+
     public boolean isDone() {
         return isDone;
     }

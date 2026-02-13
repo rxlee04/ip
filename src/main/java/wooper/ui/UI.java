@@ -52,7 +52,7 @@ public class UI {
      * @param t The task that was marked as completed.
      */
     public String printMarkTaskDoneMessage(Task t) {
-        String str = "Nice! I've marked this task as done:" + "\n" + t.toString();
+        String str = "Woo-pah! I've marked this task as done:" + "\n" + t.toString();
         return str;
     }
 
@@ -115,6 +115,11 @@ public class UI {
                 str += (i + 1) + ". " + taskList.get(i).toString() + "\n";
             }
         }
+        return str;
+    }
+
+    public String printUpdateTaskMessage(Task t) {
+        String str = "Woo-pah! I've updated this task:" + "\n" + t.toString();
         return str;
     }
 

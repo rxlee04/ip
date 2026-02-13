@@ -57,8 +57,8 @@ public class WooperController {
         ParseResult pr = parser.getActionAndArguments(userInput);
         assert pr != null : "Parser should not return null";
         assert pr.getCommandType() != null : "CommandType should not be null";
-        assert pr.getArgs() != null : "Args list should not be null";      
-      
+        assert pr.getArgs() != null : "Args list should not be null";
+
         CommandType action = pr.getCommandType();
         ArrayList<String> args = pr.getArgs();
 
@@ -80,6 +80,8 @@ public class WooperController {
                 return handleDelete(args);
             case FIND:
                 return handleFind(args);
+            case UPDATE:
+                return handleUpdate(args);
             case BYE:
                 return handleBye();
             case UNKNOWN:
@@ -144,6 +146,13 @@ public class WooperController {
     private String handleFind(ArrayList<String> args) throws WooperException {
         ArrayList<Task> matchedTL = taskManager.findTasks(args.get(0));
         return ui.printFindTasksMessage(matchedTL);
+    }
+
+    private String handleUpdate(ArrayList<String> args) throws WooperException, IOException {
+        int taskNo = parseTaskIndex(args);
+        Task t = taskManager.updateTask(taskNo, args);
+        saveAllTasks();
+        return ui.printUpdateTaskMessage(t);
     }
 
     private String handleBye() {

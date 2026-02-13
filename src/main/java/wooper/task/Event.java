@@ -18,8 +18,8 @@ public class Event extends Task {
      * Creates an event task with a specific start and end date-time.
      *
      * @param inTaskName Description of the event task.
-     * @param inStartDT Start date and time of the event.
-     * @param inEndDT End date and time of the event.
+     * @param inStartDT  Start date and time of the event.
+     * @param inEndDT    End date and time of the event.
      */
     public Event(String inTaskName, LocalDateTime inStartDT, LocalDateTime inEndDT) {
         super(inTaskName);
@@ -32,9 +32,9 @@ public class Event extends Task {
     /**
      * Creates an event task with a specific start and end date.
      *
-     * @param inTaskName Description of the event task.
+     * @param inTaskName  Description of the event task.
      * @param inStartDate Start date of the event.
-     * @param inEndDate End date of the event.
+     * @param inEndDate   End date of the event.
      */
     public Event(String inTaskName, LocalDate inStartDate, LocalDate inEndDate) {
         super(inTaskName);
@@ -55,6 +55,16 @@ public class Event extends Task {
                 : startDate.toString();
     }
 
+    public void setEventStart(LocalDateTime inStartDT) {
+        startDateTime = inStartDT;
+        startDate = null;
+    }
+
+    public void setEventStart(LocalDate inStartDate) {
+        startDate = inStartDate;
+        startDateTime = null;
+    }
+
     /**
      * Returns the end time or date of the event.
      *
@@ -64,6 +74,16 @@ public class Event extends Task {
         return hasTime()
                 ? endDateTime.toString()
                 : endDate.toString();
+    }
+
+    public void setEventEnd(LocalDateTime inEndDT) {
+        endDateTime = inEndDT;
+        endDate = null;
+    }
+
+    public void setEventEnd(LocalDate inEndDate) {
+        endDate = inEndDate;
+        endDateTime = null;
     }
 
     private boolean hasTime() {
