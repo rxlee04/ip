@@ -55,6 +55,10 @@ public class WooperController {
     public String handleUserInput(String userInput) {
         // formatted user input
         ParseResult pr = parser.getActionAndArguments(userInput);
+        assert pr != null : "Parser should not return null";
+        assert pr.getCommandType() != null : "CommandType should not be null";
+        assert pr.getArgs() != null : "Args list should not be null";      
+      
         CommandType action = pr.getCommandType();
         ArrayList<String> args = pr.getArgs();
 
