@@ -11,7 +11,7 @@ import wooper.enums.CommandType;
  */
 public class ParseResult {
     private CommandType command;
-    private ArrayList<String> args;
+    private ArrayList<String> args = new ArrayList<>();
 
     /**
      * Creates a parse result with the specified command type.

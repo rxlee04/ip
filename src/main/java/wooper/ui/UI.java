@@ -36,7 +36,7 @@ public class UI {
     public String printTaskList(ArrayList<Task> taskList) {
         String str = "";
         if (taskList.isEmpty()) {
-            str = "Woop! No matching tasks found.";
+            str = "Woop! Your task list is empty!";
         } else {
             str = "Here are the tasks in your list:";
             for (int i = 0; i < taskList.size(); i++) {
@@ -116,5 +116,9 @@ public class UI {
             }
         }
         return str;
+    }
+
+    public String printUnknownCommandMessage() {
+        return "Wooooo-pah? I don't understand this command.";
     }
 }
