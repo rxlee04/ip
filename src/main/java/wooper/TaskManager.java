@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.Temporal;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import wooper.exception.WooperException;
 import wooper.task.Deadline;
@@ -177,12 +178,10 @@ public class TaskManager {
         if (taskStr.isEmpty() || taskStr.isBlank()) {
             throw new WooperException("Let me know which task you are trying to find :>");
         }
-        ArrayList<Task> matchedTL = new ArrayList<>();
-        for (int i = 0; i < taskList.size(); i++) {
-            if (taskList.get(i).getTaskName().toLowerCase().contains(taskStr.toLowerCase())) {
-                matchedTL.add(taskList.get(i));
-            }
-        }
+
+        ArrayList<Task> matchedTL = taskList.stream()
+                .filter(t -> t.getTaskName().toLowerCase().contains(taskStr.toLowerCase()))
+                .collect(Collectors.toCollection(ArrayList::new));
         return matchedTL;
     }
 }
