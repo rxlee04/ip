@@ -51,6 +51,8 @@ public class TaskManager {
             throw new WooperException("Choose a number from the task list!");
         }
         Task t = taskList.get(taskNo);
+        assert t != null : "Retrieved task should not be null";
+
         t.setDone(true);
         return t;
     }
@@ -67,6 +69,8 @@ public class TaskManager {
             throw new WooperException("Choose a number from the task list!");
         }
         Task t = taskList.get(taskNo);
+        assert t != null : "Retrieved task should not be null";
+
         t.setDone(false);
         return t;
     }
@@ -84,6 +88,8 @@ public class TaskManager {
         }
         ToDo td = new ToDo(taskName);
         taskList.add(td);
+        assert taskList.get(taskList.size() - 1) == td : "Newly added ToDo should be at end of task list";
+
         return td;
     }
 
@@ -109,6 +115,8 @@ public class TaskManager {
             throw new WooperException("Invalid deadline date format.");
         }
         taskList.add(td);
+        assert taskList.get(taskList.size() - 1) == td : "Newly added Deadline task should be in task list";
+
         return td;
     }
 
@@ -127,6 +135,9 @@ public class TaskManager {
         }
 
         Event td;
+        assert sdl != null && edl != null : "Event dates should not be null";
+        assert sdl.getClass() == edl.getClass() : "Start and end dates should be same type";
+
         if (sdl instanceof LocalDateTime && edl instanceof LocalDateTime) {
             td = new Event(taskDesc, (LocalDateTime) sdl, (LocalDateTime) edl);
         } else if (sdl instanceof LocalDate && edl instanceof LocalDate) {
@@ -135,8 +146,9 @@ public class TaskManager {
             throw new WooperException("Please give same event date format"
                     + " (DD/MM/YYYY or DD/MM/YYYY HH:mm) for BOTH");
         }
-
         taskList.add(td);
+        assert taskList.get(taskList.size() - 1) == td : "Newly added Event task should be in task list";
+
         return td;
     }
 
@@ -152,6 +164,8 @@ public class TaskManager {
             throw new WooperException("Choose a number from the task list!");
         }
         Task t = taskList.remove(taskNo);
+        assert t != null : "Retrieved task should not be null";
+
         return t;
     }
 
@@ -174,6 +188,7 @@ public class TaskManager {
      * @throws WooperException If the search string is empty or blank.
      */
     public ArrayList<Task> findTasks(String taskStr) throws WooperException {
+        assert !taskList.contains(null) : "Task list should not contain null tasks";
         if (taskStr.isEmpty() || taskStr.isBlank()) {
             throw new WooperException("Let me know which task you are trying to find :>");
         }
