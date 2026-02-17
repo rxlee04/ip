@@ -25,7 +25,9 @@ import wooper.util.DateTimeUtil;
  * with its type, description, completion status, and any relevant date information.
  */
 public class Storage {
-    /** Path to the JSON file used for persisting tasks. */
+    /**
+     * Path to the JSON file used for persisting tasks.
+     */
     private final Path filePath = Paths.get("data", "wooper.json");
 
     /**
@@ -132,48 +134,69 @@ public class Storage {
         Task task;
         switch (type) {
         case "T":
-            task = new ToDo(desc);
+            task = createTodo(desc);
             break;
         case "D":
-            String by = obj.optString("by", "");
-            if (by.isBlank()) {
-                throw new WooperException("Woop! Save file is corrupted (missing deadline).");
-            }
-            if (DateTimeUtil.isDateTime(by)) {
-                LocalDateTime dt = LocalDateTime.parse(by);
-                task = new Deadline(desc, dt);
-            } else {
-                LocalDate d = LocalDate.parse(by);
-                task = new Deadline(desc, d);
-            }
+            task = createDeadline(obj, desc);
             break;
         case "E":
-            String from = obj.optString("from", "");
-            String to = obj.optString("to", "");
-            if (from.isBlank() || to.isBlank()) {
-                throw new WooperException("Woop! Save file is corrupted (missing event time).");
-            }
-
-            boolean fromDT = DateTimeUtil.isDateTime(from);
-            boolean toDT = DateTimeUtil.isDateTime(to);
-
-            if (fromDT != toDT) {
-                throw new WooperException("Woop! Save file is corrupted (event time format mismatch).");
-            }
-            if (fromDT && toDT) {
-                LocalDateTime start = LocalDateTime.parse(from);
-                LocalDateTime end = LocalDateTime.parse(to);
-                task = new Event(desc, start, end);
-            } else {
-                LocalDate start = LocalDate.parse(from);
-                LocalDate end = LocalDate.parse(to);
-                task = new Event(desc, start, end);
-            }
+            task = createEvent(obj, desc);
             break;
         default:
             throw new WooperException("Woop! Save file is corrupted (unknown task type).");
         }
+
         task.setDone(done);
         return task;
+    }
+
+    private Task createTodo(String desc) {
+        return new ToDo(desc);
+    }
+
+    private Task createDeadline(JSONObject obj, String desc)
+            throws WooperException {
+
+        String by = obj.optString("by", "");
+        if (by.isBlank()) {
+            throw new WooperException(
+                    "Woop! Save file is corrupted (missing deadline).");
+        }
+
+        if (DateTimeUtil.isDateTime(by)) {
+            return new Deadline(desc, LocalDateTime.parse(by));
+        } else {
+            return new Deadline(desc, LocalDate.parse(by));
+        }
+    }
+
+    private Task createEvent(JSONObject obj, String desc)
+            throws WooperException {
+
+        String from = obj.optString("from", "");
+        String to = obj.optString("to", "");
+
+        if (from.isBlank() || to.isBlank()) {
+            throw new WooperException(
+                    "Woop! Save file is corrupted (missing event time).");
+        }
+
+        boolean fromDT = DateTimeUtil.isDateTime(from);
+        boolean toDT = DateTimeUtil.isDateTime(to);
+
+        if (fromDT != toDT) {
+            throw new WooperException(
+                    "Woop! Save file is corrupted (event time format mismatch).");
+        }
+
+        if (fromDT) {
+            return new Event(desc,
+                    LocalDateTime.parse(from),
+                    LocalDateTime.parse(to));
+        } else {
+            return new Event(desc,
+                    LocalDate.parse(from),
+                    LocalDate.parse(to));
+        }
     }
 }
