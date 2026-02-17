@@ -156,14 +156,23 @@ public class Parser {
             return "";
         }
 
-        String afterFlag = rest.substring(start).trim();
-        if (afterFlag.isEmpty()) {
+        String tail = rest.substring(start);
+        if (tail.trim().isEmpty()) {
             return "";
         }
 
-        // value ends before next " /"
-        int nextFlagIdx = afterFlag.indexOf(" /");
-        String value = (nextFlagIdx == -1) ? afterFlag : afterFlag.substring(0, nextFlagIdx);
+        // If the next non-space char is '/', it means next flag immediately -> no value for this flag
+        int i = 0;
+        while (i < tail.length() && Character.isWhitespace(tail.charAt(i))) {
+            i++;
+        }
+        if (i < tail.length() && tail.charAt(i) == '/') {
+            return "";
+        }
+
+        // Value ends right before the next flag occurrence: " /"
+        int nextFlagIdx = tail.indexOf(" /");
+        String value = (nextFlagIdx == -1) ? tail : tail.substring(0, nextFlagIdx);
 
         return value.trim();
     }
