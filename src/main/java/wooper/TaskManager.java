@@ -137,7 +137,6 @@ public class TaskManager {
 
         Event tEvent;
         assert sdl != null && edl != null : "Event dates should not be null";
-        assert sdl.getClass() == edl.getClass() : "Start and end dates should be same type";
 
         if (sdl instanceof LocalDateTime && edl instanceof LocalDateTime) {
             tEvent = new Event(taskDesc, (LocalDateTime) sdl, (LocalDateTime) edl);
@@ -147,6 +146,7 @@ public class TaskManager {
             throw new WooperException("Please give same event date format"
                     + " (DD/MM/YYYY or DD/MM/YYYY HH:mm) for BOTH");
         }
+        assert sdl.getClass() == edl.getClass() : "Start and end dates should be same type";
 
         taskList.add(tEvent);
         assert taskList.get(taskList.size() - 1) == tEvent : "Newly added Event task should be in task list";
