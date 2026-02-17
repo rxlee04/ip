@@ -24,20 +24,15 @@ public class Parser {
      * @return A {@link ParseResult} containing the parsed command type and arguments.
      */
     public ParseResult getActionAndArguments(String str) {
-        if (str == null) {
+        if (str == null || str.trim().isEmpty()) {
             return new ParseResult(CommandType.UNKNOWN, new ArrayList<>());
         }
 
-        str = str.trim();
-        ArrayList<String> args = new ArrayList<>();
-
-        if (str.isEmpty()) {
-            return new ParseResult(CommandType.UNKNOWN, args);
-        }
-
-        String[] parts = str.split("\\s+", 2);
+        String[] parts = str.trim().split("\\s+", 2);
         String cmd = parts[0].toLowerCase();
         String rest = (parts.length > 1) ? parts[1].trim() : "";
+
+        ArrayList<String> args = new ArrayList<>();
 
         switch (cmd) {
         case "list":
