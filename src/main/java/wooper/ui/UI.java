@@ -96,7 +96,7 @@ public class UI {
      * @param err The error message to be displayed.
      */
     public String printErrorMessage(String err) {
-        String str = "Woop! " + err;
+        String str = "Woopsie! " + err;
         return str;
     }
 
