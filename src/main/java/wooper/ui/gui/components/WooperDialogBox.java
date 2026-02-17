@@ -1,5 +1,6 @@
 package wooper.ui.gui.components;
 
+
 import java.io.IOException;
 
 import javafx.fxml.FXML;
@@ -33,12 +34,26 @@ public class WooperDialogBox extends HBox {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        dialog.setText(text);
         displayPicture.setFill(new ImagePattern(wooperImage));
+
+        dialog.setText(text);
+        if (isError(text)) {
+            dialog.setStyle(
+                    "-fx-background-color: #FDE2E4;"
+                            + "-fx-background-radius: 12;"
+                            + "-fx-padding: 10px;"
+                            + "-fx-text-fill: #7A1E1E;"
+            );
+        }
+
     }
 
     public static WooperDialogBox getWooperDialog(String text) {
         var db = new WooperDialogBox(text);
         return db;
+    }
+
+    private boolean isError(String text) {
+        return text.startsWith("Woopsie!");
     }
 }

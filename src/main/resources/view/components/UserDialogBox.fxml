@@ -13,7 +13,7 @@
          xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <Label fx:id="dialog" minHeight="-Infinity" text="Label" wrapText="true"
-               style="-fx-background-color: #CDE9FF; -fx-background-radius: 12; -fx-padding: 10px;"/>
+               style="-fx-background-color: #CDE9FF; -fx-background-radius: 12; -fx-padding: 6px 10px;"/>
     </children>
     <padding>
         <Insets top="15.0" right="10.0" />
