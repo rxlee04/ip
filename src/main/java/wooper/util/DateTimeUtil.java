@@ -80,9 +80,9 @@ public class DateTimeUtil {
         // check if user gave date/datetime
         if (dateStr == null || dateStr.isBlank()) {
             if (type == CommandType.DEADLINE) {
-                throw new WooperException("Woop! Please give a deadline!");
+                throw new WooperException("Please give a deadline!");
             } else if (type == CommandType.EVENT) {
-                throw new WooperException("Woop! Please give event's start and/or end date!");
+                throw new WooperException("Please give event's start and/or end date!");
             }
         }
 
@@ -98,7 +98,7 @@ public class DateTimeUtil {
             return LocalDate.parse(dateStr, DATE_FORMATTER);
         } catch (DateTimeParseException ex) {
             throw new WooperException(
-                    "Woop! Date must be DD/MM/YYYY or DD/MM/YYYY HH:mm");
+                    "Date must be DD/MM/YYYY or DD/MM/YYYY HH:mm");
         }
     }
 }

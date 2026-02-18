@@ -62,10 +62,10 @@ public class Storage {
             return tasks;
 
         } catch (IOException e) {
-            throw new WooperException("Woop! Failed to read save file.");
+            throw new WooperException("Failed to read save file.");
         } catch (JSONException e) {
             // corrupted / not valid JSON
-            throw new WooperException("Woop! Save file is corrupted (invalid JSON).");
+            throw new WooperException("Save file is corrupted (invalid JSON).");
         }
     }
 
@@ -128,7 +128,7 @@ public class Storage {
         boolean done = obj.optBoolean("done", false);
 
         if (desc.isBlank()) {
-            throw new WooperException("Woop! Save file is corrupted (missing description).");
+            throw new WooperException("Save file is corrupted (missing description).");
         }
 
         Task task;
@@ -143,7 +143,7 @@ public class Storage {
             task = createEvent(obj, desc);
             break;
         default:
-            throw new WooperException("Woop! Save file is corrupted (unknown task type).");
+            throw new WooperException("Save file is corrupted (unknown task type).");
         }
 
         task.setDone(done);
@@ -160,7 +160,7 @@ public class Storage {
         String by = obj.optString("by", "");
         if (by.isBlank()) {
             throw new WooperException(
-                    "Woop! Save file is corrupted (missing deadline).");
+                    "Save file is corrupted (missing deadline).");
         }
 
         if (DateTimeUtil.isDateTime(by)) {
@@ -178,7 +178,7 @@ public class Storage {
 
         if (from.isBlank() || to.isBlank()) {
             throw new WooperException(
-                    "Woop! Save file is corrupted (missing event time).");
+                    "Save file is corrupted (missing event time).");
         }
 
         boolean fromDT = DateTimeUtil.isDateTime(from);
@@ -186,7 +186,7 @@ public class Storage {
 
         if (fromDT != toDT) {
             throw new WooperException(
-                    "Woop! Save file is corrupted (event time format mismatch).");
+                    "Save file is corrupted (event time format mismatch).");
         }
 
         if (fromDT) {
