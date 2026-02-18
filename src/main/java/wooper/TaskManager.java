@@ -135,17 +135,18 @@ public class TaskManager {
             throw new WooperException("Please give the event a description!");
         }
 
+        validateEventDateRange(sdl, edl);
+
         Event tEvent;
         assert sdl != null && edl != null : "Event dates should not be null";
 
-        if (sdl instanceof LocalDateTime && edl instanceof LocalDateTime) {
+        if (sdl instanceof LocalDateTime) {
             tEvent = new Event(taskDesc, (LocalDateTime) sdl, (LocalDateTime) edl);
-        } else if (sdl instanceof LocalDate && edl instanceof LocalDate) {
-            tEvent = new Event(taskDesc, (LocalDate) sdl, (LocalDate) edl);
         } else {
-            throw new WooperException("Please give same event date format"
-                    + " (DD/MM/YYYY or DD/MM/YYYY HH:mm) for BOTH");
+            // must be LocalDate here because validate already checked
+            tEvent = new Event(taskDesc, (LocalDate) sdl, (LocalDate) edl);
         }
+
         assert sdl.getClass() == edl.getClass() : "Start and end dates should be same type";
 
         taskList.add(tEvent);
@@ -334,19 +335,44 @@ public class TaskManager {
             Temporal start = DateTimeUtil.parseDateOrDateTime(from, CommandType.EVENT);
             Temporal end = DateTimeUtil.parseDateOrDateTime(to, CommandType.EVENT);
 
-            if (start.getClass() != end.getClass()) {
-                throw new WooperException("Please use the same event date format for /from and /to.");
-            }
+            validateEventDateRange(start, end);
 
             if (start instanceof LocalDateTime) {
                 task.setEventStart((LocalDateTime) start);
                 task.setEventEnd((LocalDateTime) end);
-            } else if (start instanceof LocalDate) {
+            } else {
+                // must be LocalDate because validate already ensured valid types
                 task.setEventStart((LocalDate) start);
                 task.setEventEnd((LocalDate) end);
-            } else {
-                throw new WooperException("Invalid event date format.");
             }
         }
+    }
+
+    private void validateEventDateRange(Temporal start, Temporal end) throws WooperException {
+        if (start == null || end == null) {
+            throw new WooperException("Event dates cannot be null.");
+        }
+
+        // must be same type
+        if (start.getClass() != end.getClass()) {
+            throw new WooperException("Please give same event date format (DD/MM/YYYY or DD/MM/YYYY HH:mm) for BOTH");
+        }
+
+        // must be start < end
+        if (start instanceof LocalDateTime) {
+            if (!((LocalDateTime) start).isBefore((LocalDateTime) end)) {
+                throw new WooperException("Event start date/time must be before end date/time.");
+            }
+            return;
+        }
+
+        if (start instanceof LocalDate) {
+            if (!((LocalDate) start).isBefore((LocalDate) end)) {
+                throw new WooperException("Event start date must be before end date.");
+            }
+            return;
+        }
+
+        throw new WooperException("Invalid event date format.");
     }
 }
