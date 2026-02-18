@@ -12,7 +12,8 @@ public class Parser {
     private static final String BY = "/by";
     private static final String FROM = "/from";
     private static final String TO = "/to";
-    private static final String TASK_TYPE = "/taskType";
+    private static final String TASK_TYPE = "/tasktype";
+    private static final String TASK_NAME = "/taskname";
 
     /**
      * Returns the command type and arguments parsed from the given user input.
@@ -125,11 +126,11 @@ public class Parser {
         String afterNo = (firstSpace == -1) ? "" : rest.substring(firstSpace).trim();
 
         // 2) Extract all flags (missing -> "")
-        String taskType = extractFlagValue(afterNo, "/tasktype");
-        String taskName = extractFlagValue(afterNo, "/taskname");
-        String by = extractFlagValue(afterNo, "/by");
-        String from = extractFlagValue(afterNo, "/from");
-        String to = extractFlagValue(afterNo, "/to");
+        String taskType = extractFlagValue(afterNo, TASK_TYPE);
+        String taskName = extractFlagValue(afterNo, TASK_NAME);
+        String by = extractFlagValue(afterNo, BY);
+        String from = extractFlagValue(afterNo, FROM);
+        String to = extractFlagValue(afterNo, TO);
 
         args.add(taskType);
         args.add(taskName);

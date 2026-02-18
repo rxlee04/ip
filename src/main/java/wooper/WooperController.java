@@ -50,7 +50,6 @@ public class WooperController {
      * Displays the greeting message.
      * Repeatedly reads user input, parses commands, executes the requested actions, and saves task
      * updates when necessary. The loop terminates when the "bye" command is given.
-     *
      */
     public String handleUserInput(String userInput) {
         // formatted user input

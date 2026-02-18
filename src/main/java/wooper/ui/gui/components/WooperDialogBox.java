@@ -1,6 +1,5 @@
 package wooper.ui.gui.components;
 
-
 import java.io.IOException;
 
 import javafx.fxml.FXML;
