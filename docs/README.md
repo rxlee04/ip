@@ -48,7 +48,7 @@ or
 
 Adds a task that occurs within a specific time period.
 
-Both date-only and date+time formats are supported.
+Both date-only and date+time formats are supported. (Have to be date and date or datetime and datetime, no mixed)
 
 **Format:**  
 `event DESCRIPTION /from DD/MM/YYYY /to DD/MM/YYYY`  
